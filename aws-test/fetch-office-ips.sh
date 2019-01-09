@@ -1,2 +1,4 @@
 #!/bin/bash
-sed -e 's/#.*$//' office-ips.txt | sed 's/ *$//'
+
+IPS=$(bash process-office-ips.sh) 
+jq -n --arg ips "$IPS" '{"office_ips":$ips}'
