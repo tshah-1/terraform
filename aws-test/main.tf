@@ -1,15 +1,31 @@
 provider "aws" {
-	profile		= "${var.profile}"
+	profile		= "dazn-test"
 	region		= "${var.region}"
 }
 
+variable "images" {
+	type		= "map"
+	default = {
+	  "us-west-1" 		= "ami-4826c22b"
+	  "ap-southeast-1" 	= "ami-8e0205f2"
+	  "ap-northeast-1"	= "ami-8e8847f1"
+	  "ca-central-1"	= "ami-e802818c"
+	  "eu-central-1"	= "ami-dd3c0f36"
+	  "eu-west-3"		= "ami-262e9f5b"
+	  "sa-east-1"		= "ami-cb5803a7"
+	}
+}
 
-resource "aws_instance" "proxy_test" {
-	ami		= "ami-00846a67"
-	instance_type	= "t2.micro"
-
-	tags {
-		Name 	= "dazn_proxy_test"
+variable "keys" {
+        type            = "map"
+        default = {
+          "us-west-1"           = "aws-dazntest-n.california"
+          "ap-southeast-1"      = "aws-dazn-test-singapore"
+          "ap-northeast-1"      = "dazn-test-tokyo-syseng"
+          "ca-central-1"        = "DAZN-trish"
+          "eu-central-1"        = "dazntest_frankfurt_syseng"
+	  "eu-west-3"		= "dazntest-paris-keypair"
+          "sa-east-1"           = "DAZNTEST_SaoPaulo_keypair"
 	}
 }
 
@@ -27,7 +43,7 @@ resource "aws_security_group" "DAZN_Proxy_Squid_Access" {
   description 		= "DAZN Proxy Squid Security Group"
   count       		= "${local.office_sg_count}"
 
-  # allow all traffic from office ip ranges
+  # allow squid traffic from office ip ranges
   ingress {
     from_port   	= 3128
     to_port     	= 3128
@@ -48,8 +64,8 @@ resource "aws_security_group" "DAZN_Proxy_Squid_Access" {
 }
 
 resource "aws_security_group" "DAZN_Proxy_SSH_Access" {
-        name            = "dazn-proxy-ssh-access"
-        description     = "dazn proxy SSH access SG"
+        name            = "DAZN-PROXY-SSH-ACCESS"
+        description     = "DAZN proxy SSH access SG"
 
         # allow traffic to SSH port
         ingress {
@@ -70,4 +86,20 @@ resource "aws_security_group" "DAZN_Proxy_SSH_Access" {
                 Name = "Dazn Proxy SSH Access SG"
 
         }
+}
+
+resource "aws_instance" "proxy_test" {
+	ami		= "${var.images}"
+	key_name	= "${var.keys}"
+	instance_type	= "t2.micro"
+	vpc_security_group_ids = ["${aws_security_group.DAZN_Proxy_SSH_Access.id}"]
+	vpc_security_group_ids = ["${aws_security_group.DAZN_Proxy_Squid_Access.*.id}"]
+
+	tags {
+		Name 	= "dazn_proxy_test"
+	}
+}
+
+resource "aws_eip" "dazn_proxy_ip" {
+	instance 	= "${aws_instance.proxy_test.id}"
 }
