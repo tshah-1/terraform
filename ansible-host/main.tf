@@ -71,6 +71,11 @@ resource "aws_instance" "Proxy_Ansible_Host" {
 	scl enable rh-python36 bash
 	pip install boto
 	pip install ansible
+	wget https://raw.githubusercontent.com/tshah-1/terraform/master/ansible-host/ec2.ini
+	wget https://raw.githubusercontent.com/tshah-1/terraform/master/ansible-host/ec2.py
+	https://github.com/tshah-1/terraform/blob/master/ansible-host/endpoints.json
+	mv ec2* /etc/ansible
+	mv endpoints.json  /opt/rh/rh-python36/root/usr/lib/python3.6/site-packages/boto/endpoints.json
 	EOF
 	tags {
 		Name	= "Proxy_Ansible_Host"
