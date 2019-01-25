@@ -85,7 +85,7 @@ resource "aws_security_group" "DAZN_Proxy_SSH_Access" {
                 from_port       = 22
                 to_port         = 22
                 protocol        = "tcp"
-                cidr_blocks     = ["62.253.83.190/32", "82.11.218.115/32"]
+                cidr_blocks     = ["62.253.83.190/32", "82.11.218.115/32", "35.181.19.212/32"]
         }
 
         egress {
@@ -101,7 +101,7 @@ resource "aws_security_group" "DAZN_Proxy_SSH_Access" {
         }
 }
 
-resource "aws_instance" "proxy_test" {
+resource "aws_instance" "dazn_proxy" {
 	ami		= "${var.images["${terraform.workspace}"]}"
 	key_name	= "${var.keys["${terraform.workspace}"]}"
 	instance_type	= "t2.micro"
