@@ -64,18 +64,19 @@ resource "aws_instance" "Proxy_Ansible_Host" {
 	sudo su -
 	ssh-keygen -f /root/.ssh/id_rsa -t rsa -N ''
 	echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC2QdIEjlrYnWri4+YgQJ8O82FGEWOTtdf/3iZBGmjR6uo8xUrIE9iZhH3OSLITmjQC1LDzRmaVctHVYl7hbmzFWJTgEsVO2q+QXbout+yAEx8C5XUg1YdZSDjbnkCe0AA1qGz3KWIudpCDZGRov/kkIL32ZF+PXiDbqaYN7p3su8QrYfHTqo9B9PhYS2FaununIYMDAkOaWAORidzU8kzYzFIjFiUZTNVH8oIyM+PkLc+rsRRLVONRU00HWoXrzEo1tLPxeVpn/81iPjYrGO5K2MKmqeDYR5OIgAu8deZ7n/xLiZl5qYrtEA2/K46fDZTOzEAOE1SrRzfcvVnLg4Rn trishulshah@Trishs-MacBook-Pro.local" >> /root/.ssh/authorized_keys
-	yum install centos-release-scl
-	yum install rh-python36
-	yum install wget
+	yum -y install centos-release-scl
+	yum -y install rh-python36
 	echo "scl enable rh-python36 bash" >> /etc/profile
 	scl enable rh-python36 bash
-	pip install boto
-	pip install ansible
-	wget https://raw.githubusercontent.com/tshah-1/terraform/master/ansible-host/ec2.ini
-	wget https://raw.githubusercontent.com/tshah-1/terraform/master/ansible-host/ec2.py
-	https://github.com/tshah-1/terraform/blob/master/ansible-host/endpoints.json
-	mv ec2* /etc/ansible
-	mv endpoints.json  /opt/rh/rh-python36/root/usr/lib/python3.6/site-packages/boto/endpoints.json
+	/opt/rh/rh-python36/root/usr/bin/pip install --upgrade pip
+	/opt/rh/rh-python36/root/usr/bin/pip install boto
+	/opt/rh/rh-python36/root/usr/bin/pip install ansible
+	mkdir /etc/ansible
+	curl https://raw.githubusercontent.com/tshah-1/terraform/master/ansible-host/ec2.ini -o /etc/ansible/ec2.ini
+	curl https://raw.githubusercontent.com/tshah-1/terraform/master/ansible-host/ec2.py -o /etc/ansible/ec2.py
+	curl https://raw.githubusercontent.com/tshah-1/terraform/master/ansible-host/endpoints.json -o /opt/rh/rh-python36/root/usr/lib/python3.6/site-packages/boto/endpoints.json
+	#mv ec2* /etc/ansible
+	#mv endpoints.json  /opt/rh/rh-python36/root/usr/lib/python3.6/site-packages/boto/endpoints.json
 	EOF
 	tags {
 		Name	= "Proxy_Ansible_Host"

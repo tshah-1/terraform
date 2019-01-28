@@ -85,7 +85,7 @@ resource "aws_security_group" "DAZN_Proxy_SSH_Access" {
                 from_port       = 22
                 to_port         = 22
                 protocol        = "tcp"
-                cidr_blocks     = ["62.253.83.190/32", "82.11.218.115/32", "35.181.19.212/32"]
+                cidr_blocks     = ["62.253.83.190/32", "35.181.19.212/32", "82.25.7.144/32"]
         }
 
         egress {
@@ -107,6 +107,7 @@ resource "aws_instance" "dazn_proxy" {
 	instance_type	= "t2.micro"
 	vpc_security_group_ids = ["${aws_security_group.DAZN_Proxy_SSH_Access.id}"]
 	vpc_security_group_ids = ["${aws_security_group.DAZN_Proxy_Squid_Access.*.id}"]
+	count = "${var.count}"
         user_data = <<-EOF
         #!/bin/bash
 	sudo su -
@@ -116,10 +117,10 @@ resource "aws_instance" "dazn_proxy" {
 	EOF
 
 	tags {
-		Name	= "${var.name["${terraform.workspace}"]}"
+		Name	= "${var.name["${terraform.workspace}"]}${count.index+1}"
 	}
 }
 
 resource "aws_eip" "dazn_proxy_ip" {
-	instance 	= "${aws_instance.proxy_test.id}"
+	instance 	= "${aws_instance.dazn_proxy.id}"
 }
