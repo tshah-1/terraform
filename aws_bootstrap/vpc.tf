@@ -28,6 +28,13 @@ resource "aws_subnet" "private_subnet_a" {
   }
 }
 
+resource "aws_internet_gateway" "main-ig" {
+	vpc_id		= "${aws_vpc.main.id}"
+	tags {
+		Name = "main IG"
+	}
+}
+
 resource "aws_eip" "nat" {
   vpc = true
 }
@@ -35,6 +42,9 @@ resource "aws_eip" "nat" {
 resource "aws_nat_gateway" "nat" {
   allocation_id = "${aws_eip.nat.id}"
   subnet_id     = "${aws_subnet.public_subnet_a.id}"
+	tags {
+		Name = "main VPC NAT"
+	}
 }
 
 resource "aws_route_table" "private_routetable" {
