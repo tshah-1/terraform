@@ -27,6 +27,17 @@ resource "aws_subnet" "private_subnet_a" {
 	}
 }
 
+resource "aws_subnet" "sportal_efs" {
+        vpc_id                  = "${aws_vpc.main.id}"
+        cidr_block              = "172.24.2.0/24"
+        availability_zone       = "eu-central-1a"
+	map_public_ip_on_launch	= "true"
+
+        tags {
+                Name            = "Sportal_efs"
+        }
+}
+
 resource "aws_internet_gateway" "main-ig" {
 	vpc_id			= "${aws_vpc.main.id}"
 	tags {
