@@ -1,10 +1,10 @@
 resource "aws_security_group" "sportal_web" {
-        name            = "sportal_web"
-        description     = "Sportal Web Server access SG"
+	name			= "sportal_web"
+        description		= "Sportal Web Server access SG"
 
         # allow traffic to HTTP port
-        ingress {
-                from_port       = 443
+	ingress {
+		from_port       = 443
                 to_port         = 443
                 protocol        = "tcp"
                 cidr_blocks     = ["0.0.0.0/0"]
@@ -21,7 +21,7 @@ resource "aws_security_group" "sportal_web" {
                 from_port       = 22
                 to_port         = 22
                 protocol        = "tcp"
-                cidr_blocks     = ["0.0.0.0/0"]
+                cidr_blocks     = ["82.27.144.252/32"]
         }
 
         egress {
@@ -32,7 +32,7 @@ resource "aws_security_group" "sportal_web" {
         }
 
         tags {
-                Name = "Sportal Web SG"
+                Name		= "Sportal Web SG"
 
         }
 }
