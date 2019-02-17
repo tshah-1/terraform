@@ -11,6 +11,7 @@ resource "aws_subnet" "public_subnet_a" {
 	vpc_id			= "${aws_vpc.main.id}"
 	cidr_block		= "172.24.0.0/24"
 	availability_zone	= "eu-central-1a"
+	map_public_ip_on_launch	= "true"
 
 	tags {
 		Name		= "Sportal_fe"
@@ -31,7 +32,6 @@ resource "aws_subnet" "sportal_efs" {
         vpc_id                  = "${aws_vpc.main.id}"
         cidr_block              = "172.24.2.0/24"
         availability_zone       = "eu-central-1a"
-	map_public_ip_on_launch	= "true"
 
         tags {
                 Name            = "Sportal_efs"
