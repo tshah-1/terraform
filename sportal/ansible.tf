@@ -29,7 +29,7 @@ resource "aws_instance" "Sportal_Ansible_Host" {
 	key_name		= "${var.keys["${terraform.workspace}"]}"
 	instance_type		= "t2.micro"
 	vpc_security_group_ids	= ["${aws_security_group.Ansible_SSH_Access.id}"]
-	subnet_id		= "${aws_subnet.private_subnet_a.id}"
+	subnet_id		= "${aws_subnet.public_subnet_a.id}"
 	user_data		= <<-EOF
 	#!/bin/bash
 	sudo su -
