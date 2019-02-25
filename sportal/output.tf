@@ -18,7 +18,7 @@ output "dns_nameserver" {
   value       = "${aws_route53_zone.sportal.name_servers}"
 }
 
- output "openvpn_ip" {
+output "openvpn_ip" {
   description = "OpenVPN Host Elastic IP"
   value       = "${aws_instance.openvpn.public_ip}"
 }

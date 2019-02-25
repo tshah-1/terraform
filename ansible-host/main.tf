@@ -1,65 +1,67 @@
 provider "aws" {
-	profile		= "dazn-test"
- 	region = "${terraform.workspace}"
+  profile = "dazn-test"
+  region  = "${terraform.workspace}"
 }
 
 variable "images" {
-	type		= "map"
-	default = {
-	  "us-west-1" 		= "ami-4826c22b"
-	  "ap-southeast-1" 	= "ami-8e0205f2"
-	  "ap-northeast-1"	= "ami-8e8847f1"
-	  "ca-central-1"	= "ami-e802818c"
-	  "eu-central-1"	= "ami-dd3c0f36"
-	  "eu-west-3"		= "ami-262e9f5b"
-	  "sa-east-1"		= "ami-cb5803a7"
-	}
+  type = "map"
+
+  default = {
+    "us-west-1"      = "ami-4826c22b"
+    "ap-southeast-1" = "ami-8e0205f2"
+    "ap-northeast-1" = "ami-8e8847f1"
+    "ca-central-1"   = "ami-e802818c"
+    "eu-central-1"   = "ami-dd3c0f36"
+    "eu-west-3"      = "ami-262e9f5b"
+    "sa-east-1"      = "ami-cb5803a7"
+  }
 }
 
 variable "keys" {
-        type            = "map"
-        default = {
-          "us-west-1"           = "aws-dazntest-n.california"
-          "ap-southeast-1"      = "aws-dazn-test-singapore"
-          "ap-northeast-1"      = "dazn-test-tokyo-syseng"
-          "ca-central-1"        = "DAZN-trish"
-          "eu-central-1"        = "dazntest_frankfurt_syseng"
-	  "eu-west-3"		= "dazntest-paris-keypair"
-          "sa-east-1"           = "DAZNTEST_SaoPaulo_keypair"
-	}
+  type = "map"
+
+  default = {
+    "us-west-1"      = "aws-dazntest-n.california"
+    "ap-southeast-1" = "aws-dazn-test-singapore"
+    "ap-northeast-1" = "dazn-test-tokyo-syseng"
+    "ca-central-1"   = "DAZN-trish"
+    "eu-central-1"   = "dazntest_frankfurt_syseng"
+    "eu-west-3"      = "dazntest-paris-keypair"
+    "sa-east-1"      = "DAZNTEST_SaoPaulo_keypair"
+  }
 }
 
 resource "aws_security_group" "Ansible_SSH_Access" {
-        name            = "ANSIBLE-SSH-ACCESS"
-        description     = "Ansible SSH access SG"
+  name        = "ANSIBLE-SSH-ACCESS"
+  description = "Ansible SSH access SG"
 
-        # allow traffic to SSH port
-        ingress {
-                from_port       = 22
-                to_port         = 22
-                protocol        = "tcp"
-                cidr_blocks     = ["62.253.83.190/32", "82.11.218.115/32", "82.25.7.144/32"]
-        }
+  # allow traffic to SSH port
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["62.253.83.190/32", "82.11.218.115/32", "82.25.7.144/32"]
+  }
 
-        egress {
-                from_port       = 0
-                to_port         = 0
-                protocol        = "-1"
-                cidr_blocks     = ["0.0.0.0/0"]
-        }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-        tags {
-                Name = "Ansible Host SSH Access SG"
-
-        }
+  tags {
+    Name = "Ansible Host SSH Access SG"
+  }
 }
 
 resource "aws_instance" "Proxy_Ansible_Host" {
-	ami		= "${var.images["${terraform.workspace}"]}"
-	key_name	= "${var.keys["${terraform.workspace}"]}"
-	instance_type	= "t2.micro"
-	vpc_security_group_ids = ["${aws_security_group.Ansible_SSH_Access.id}"]
-	user_data = <<-EOF
+  ami                    = "${var.images["${terraform.workspace}"]}"
+  key_name               = "${var.keys["${terraform.workspace}"]}"
+  instance_type          = "t2.micro"
+  vpc_security_group_ids = ["${aws_security_group.Ansible_SSH_Access.id}"]
+
+  user_data = <<-EOF
 	#!/bin/bash
 	sudo su -
 	ssh-keygen -f /root/.ssh/id_rsa -t rsa -N ''
@@ -78,11 +80,12 @@ resource "aws_instance" "Proxy_Ansible_Host" {
 	#mv ec2* /etc/ansible
 	#mv endpoints.json  /opt/rh/rh-python36/root/usr/lib/python3.6/site-packages/boto/endpoints.json
 	EOF
-	tags {
-		Name	= "Proxy_Ansible_Host"
-	}
+
+  tags {
+    Name = "Proxy_Ansible_Host"
+  }
 }
 
 resource "aws_eip" "ansible_host_ip" {
-	instance 	= "${aws_instance.Proxy_Ansible_Host.id}"
+  instance = "${aws_instance.Proxy_Ansible_Host.id}"
 }
