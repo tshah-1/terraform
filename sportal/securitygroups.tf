@@ -42,6 +42,7 @@ resource "aws_security_group" "sportal_web" {
 
   tags {
     Name = "Sportal Web SG"
+    Application = "sportal"
   }
 }
 
@@ -81,6 +82,7 @@ resource "aws_security_group" "Ansible_SSH_Access" {
 
   tags {
     Name = "Ansible Host SSH Access SG"
+    Application = "sportal"
   }
 }
 
@@ -130,5 +132,120 @@ resource "aws_security_group" "openvpn" {
 
   tags {
     Name = "openvpn Access SG"
+    Application = "sportal"
+  }
+}
+
+resource "aws_security_group" "sportal_cms" {
+  name        = "sportal_cms"
+  description = "Sportal CMS Server access SG"
+  vpc_id      = "${aws_vpc.main.id}"
+
+  # allow traffic to HTTP port
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["${aws_eip.ansible_host_ip.public_ip}/32", "82.25.7.144/32", "62.253.83.190/32"]
+  }
+
+  ingress {
+    security_groups = ["${aws_security_group.Ansible_SSH_Access.id}", "${aws_security_group.openvpn.id}"]
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    self            = true
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags {
+    Name = "Sportal CMS SG"
+    Application = "sportal"
+  }
+}
+
+resource "aws_security_group" "sportal_web_elb" {
+  name        = "sportal_web_elb"
+  description = "Sportal Web ELB access SG"
+  vpc_id      = "${aws_vpc.main.id}"
+
+  # allow traffic to HTTP port
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags {
+    Name = "Sportal Web ELB SG"
+    Application = "sportal"
+  }
+}
+
+resource "aws_security_group" "sportal_cms_elb" {
+  name        = "sportal_cms_elb"
+  description = "Sportal CMS ELB access SG"
+  vpc_id      = "${aws_vpc.main.id}"
+
+  # allow traffic to HTTP port
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags {
+    Name = "Sportal CMS ELB SG"
+    Application = "sportal"
   }
 }
