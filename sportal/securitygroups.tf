@@ -22,7 +22,7 @@ resource "aws_security_group" "sportal_web" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${aws_eip.ansible_host_ip.public_ip}/32", "82.25.7.144/32", "62.253.83.190/32"]
+    cidr_blocks = ["${aws_eip.ansible_host_ip.public_ip}/32", "82.25.7.144/32", "62.253.83.190/32", "109.73.148.70/32"]
   }
 
   ingress {
@@ -70,7 +70,7 @@ resource "aws_security_group" "Ansible_SSH_Access" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["62.253.83.190/32", "82.11.218.115/32", "82.25.7.144/32", "82.27.144.252/32"]
+    cidr_blocks = ["62.253.83.190/32", "82.11.218.115/32", "82.25.7.144/32", "82.27.144.252/32", "109.73.148.70/32"]
   }
 
   egress {
@@ -96,7 +96,7 @@ resource "aws_security_group" "openvpn" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["62.253.83.190/32", "82.11.218.115/32", "82.25.7.144/32", "82.27.144.252/32", "176.26.193.114/32"]
+    cidr_blocks = ["62.253.83.190/32", "82.11.218.115/32", "82.25.7.144/32", "82.27.144.252/32", "176.26.193.114/32", "109.73.148.70/32"]
   }
 
   # allow traffic to HTTPS port
@@ -112,7 +112,7 @@ resource "aws_security_group" "openvpn" {
     from_port   = 943
     to_port     = 943
     protocol    = "tcp"
-    cidr_blocks = ["62.253.83.190/32", "82.11.218.115/32", "82.25.7.144/32", "82.27.144.252/32", "176.26.193.114/32"]
+    cidr_blocks = ["62.253.83.190/32", "82.11.218.115/32", "82.25.7.144/32", "82.27.144.252/32", "176.26.193.114/32", "109.73.148.70/32"]
   }
 
   # allow traffic to UDP OVPN port
@@ -160,7 +160,7 @@ resource "aws_security_group" "sportal_cms" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${aws_eip.ansible_host_ip.public_ip}/32", "82.25.7.144/32", "62.253.83.190/32"]
+    cidr_blocks = ["${aws_eip.ansible_host_ip.public_ip}/32", "82.25.7.144/32", "62.253.83.190/32", "109.73.148.70/32"]
   }
 
   ingress {
