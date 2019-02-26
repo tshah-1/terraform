@@ -51,10 +51,19 @@ resource "aws_instance" "Sportal_Ansible_Host" {
 	EOF
 
   tags {
-    Name = "Sportal_Ansible_Host"
+    Name = "csportal-ansible"
   }
 }
 
 resource "aws_eip" "ansible_host_ip" {
   instance = "${aws_instance.Sportal_Ansible_Host.id}"
+}
+
+resource "aws_route53_record" "ansible-host" {
+  zone_id = "${aws_route53_zone.sportal.zone_id}"
+  name    = "csportal-ansible"
+  type    = "A"
+  ttl     = "300"
+
+  records = ["${aws_instance.Sportal_Ansible_Host.private_ip}"]
 }

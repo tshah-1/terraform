@@ -41,7 +41,7 @@ resource "aws_security_group" "sportal_web" {
   }
 
   tags {
-    Name = "Sportal Web SG"
+    Name        = "Sportal Web SG"
     Application = "sportal"
   }
 }
@@ -57,6 +57,11 @@ resource "aws_security_group" "sportal_efs" {
     from_port       = 2049
     to_port         = 2049
     protocol        = "tcp"
+  }
+
+  tags {
+    Name        = "Sportal EFS SG"
+    Application = "sportal"
   }
 }
 
@@ -81,7 +86,7 @@ resource "aws_security_group" "Ansible_SSH_Access" {
   }
 
   tags {
-    Name = "Ansible Host SSH Access SG"
+    Name        = "Ansible Host SSH Access SG"
     Application = "sportal"
   }
 }
@@ -131,7 +136,7 @@ resource "aws_security_group" "openvpn" {
   }
 
   tags {
-    Name = "openvpn Access SG"
+    Name        = "openvpn Access SG"
     Application = "sportal"
   }
 }
@@ -179,7 +184,7 @@ resource "aws_security_group" "sportal_cms" {
   }
 
   tags {
-    Name = "Sportal CMS SG"
+    Name        = "Sportal CMS SG"
     Application = "sportal"
   }
 }
@@ -212,7 +217,7 @@ resource "aws_security_group" "sportal_web_elb" {
   }
 
   tags {
-    Name = "Sportal Web ELB SG"
+    Name        = "Sportal Web ELB SG"
     Application = "sportal"
   }
 }
@@ -245,7 +250,7 @@ resource "aws_security_group" "sportal_cms_elb" {
   }
 
   tags {
-    Name = "Sportal CMS ELB SG"
+    Name        = "Sportal CMS ELB SG"
     Application = "sportal"
   }
 }

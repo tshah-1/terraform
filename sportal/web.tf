@@ -30,28 +30,32 @@ resource "aws_route53_record" "csportal-web" {
 data "aws_availability_zones" "all" {}
 
 resource "aws_elb" "sportal_web_elb" {
-  name = "sportal-webelb"
+  name            = "sportal-webelb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
-#  availability_zones = ["${data.aws_availability_zones.all.names}"]
-  subnets = ["${aws_subnet.public_subnet_a.id}"]
+
+  #  availability_zones = ["${data.aws_availability_zones.all.names}"]
+  subnets   = ["${aws_subnet.public_subnet_a.id}"]
   instances = ["${element(aws_instance.csportal-web.*.id, count.index)}"]
+
   health_check {
-    healthy_threshold = 2
+    healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout = 3
-    interval = 30
-    target = "HTTP:80/"
+    timeout             = 3
+    interval            = 30
+    target              = "HTTP:80/"
   }
+
   listener {
-    lb_port = 80
-    lb_protocol = "http"
-    instance_port = "80"
+    lb_port           = 80
+    lb_protocol       = "http"
+    instance_port     = "80"
     instance_protocol = "http"
   }
-#  listener {
-#    lb_port = 443
-#    lb_protocol = "https"
-#    instance_port = "443"
-#    instance_protocol = "https"
-#  }
+
+  #  listener {
+  #    lb_port = 443
+  #    lb_protocol = "https"
+  #    instance_port = "443"
+  #    instance_protocol = "https"
+  #  }
 }
