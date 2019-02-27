@@ -9,6 +9,7 @@ variable "images" {
     "eu-central-1"   = "ami-01aeb888da1380a31"
     "eu-west-3"      = "ami-262e9f5b"
     "sa-east-1"      = "ami-cb5803a7"
+    "eu-west-2"      = "ami-0eab3a90fc693af19"
   }
 }
 
@@ -22,6 +23,7 @@ variable "keys" {
     "ca-central-1"   = "DAZN-trish"
     "eu-central-1"   = "sportal-frankfurt"
     "eu-west-3"      = "dazntest-paris-keypair"
+    "eu-west-2"      = "sportal-london"
     "sa-east-1"      = "DAZNTEST_SaoPaulo_keypair"
   }
 }

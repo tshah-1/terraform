@@ -3,8 +3,8 @@ variable "num_instances_cms" {
 }
 
 resource "aws_instance" "csportal-cms" {
-  ami                    = "ami-0963f4d997fb2de41"
-  key_name               = "sportal-frankfurt"
+  ami                    = "ami-0eab3a90fc693af19"
+  key_name               = "${var.keys["${terraform.workspace}"]}"
   instance_type          = "t3.xlarge"
   vpc_security_group_ids = ["${aws_security_group.sportal_cms.id}"]
   subnet_id              = "${aws_subnet.public_subnet_a.id}"
