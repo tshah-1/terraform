@@ -33,6 +33,14 @@ resource "aws_security_group" "sportal_web" {
     self            = true
   }
 
+  ingress {
+    security_groups = ["${aws_security_group.sportal_web_elb.id}"]
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    self            = true
+}
+
   egress {
     from_port   = 0
     to_port     = 0

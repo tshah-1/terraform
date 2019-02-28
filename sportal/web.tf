@@ -1,65 +1,84 @@
-variable "num_instances_web" {
-  default = 8
+variable "num_instances_web_aza" {
+  default = 3
+}
+variable "num_instances_web_azb" {
+  default = 3
+}
+variable "num_instances_web_azc" {
+  default = 2
 }
 
-# Discover subnet IDs. This requires the subnetworks to be tagged with Tier = "webfe"
-data "aws_subnet_ids" "webfe" {
-  vpc_id = "${aws_vpc.main.id}"
-  depends_on = ["aws_vpc.main"]
-  tags {
-    Name = "sportal_webfe*"
-  }
-}
-
-# Discover subnets and create a list, one for each found ID
-#data "aws_subnet" "web_tier" {
-#  count = "${length(split(",", data.aws_subnet_ids.web_tier_ids.ids))}"
-#  id = "${data.aws_subnet_ids.web_tier_ids.ids[count.index]}"
-#}
-
-# Discover subnet IDs. This requires the subnetworks to be tagged with Tier = "cms"
-data "aws_subnet_ids" "cms" {
-  vpc_id = "${aws_vpc.main.id}"
-  depends_on = ["aws_vpc.main"]
-  tags {
-    Tier = "Cms"
-  }
-}
-
-# Discover subnets and create a list, one for each found ID
-#data "aws_subnet" "cms_tier" {
-#  count = "${length(data.aws_subnet_ids.cms_tier_ids.ids)}"
-#  id = "${data.aws_subnet_ids.cms_tier_ids.ids[count.index]}"
-#}
-
-
-resource "aws_instance" "csportal-web" {
+resource "aws_instance" "csportal-web-aza" {
   ami                    = "ami-0eab3a90fc693af19"
   key_name               = "${var.keys["${terraform.workspace}"]}"
   instance_type          = "t3.xlarge"
   vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
-  subnet_id              = "${element(data.aws_subnet_ids.webfe.ids, count.index)}"
-#  subnet_id              = "${element(data.aws_subnet_ids.webfe.ids, count.index)}"
-  count                  = "${var.num_instances_web}"
+  subnet_id              = "${aws_subnet.webfe_subnet_a.id}"
+  count                  = "${var.num_instances_web_aza}"
 
   tags {
     Name = "${format("csportal-web%02d",count.index+1)}"
   }
 }
 
-resource "aws_route53_record" "csportal-web" {
+resource "aws_route53_record" "csportal-web-aza" {
   // same number of records as instances
-  count   = "${var.num_instances_web}"
+  count   = "${var.num_instances_web_aza}"
   zone_id = "${aws_route53_zone.sportal.zone_id}"
   name    = "${format("csportal-web%02d",count.index+1)}"
   type    = "A"
   ttl     = "300"
-
   // matches up record N to instance N
-  records = ["${element(aws_instance.csportal-web.*.private_ip, count.index)}"]
+  records = ["${element(aws_instance.csportal-web-aza.*.private_ip, count.index)}"]
 }
 
-data "aws_availability_zones" "all" {}
+resource "aws_instance" "csportal-web-azb" {
+  ami                    = "ami-0eab3a90fc693af19"
+  key_name               = "${var.keys["${terraform.workspace}"]}"
+  instance_type          = "t3.xlarge"
+  vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
+  subnet_id              = "${aws_subnet.webfe_subnet_b.id}"
+  count                  = "${var.num_instances_web_azb}"
+
+  tags {
+    Name = "${format("csportal-web%02d",count.index+4)}"
+  }
+}
+
+resource "aws_route53_record" "csportal-web-azb" {
+  // same number of records as instances
+  count   = "${var.num_instances_web_azb}"
+  zone_id = "${aws_route53_zone.sportal.zone_id}"
+  name    = "${format("csportal-web%02d",count.index+4)}"
+  type    = "A"
+  ttl     = "300"
+  // matches up record N to instance N
+  records = ["${element(aws_instance.csportal-web-azb.*.private_ip, count.index)}"]
+}
+
+resource "aws_instance" "csportal-web-azc" {
+  ami                    = "ami-0eab3a90fc693af19"
+  key_name               = "${var.keys["${terraform.workspace}"]}"
+  instance_type          = "t3.xlarge"
+  vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
+  subnet_id              = "${aws_subnet.webfe_subnet_c.id}"
+  count                  = "${var.num_instances_web_azc}"
+
+  tags {
+    Name = "${format("csportal-web%02d",count.index+7)}"
+  }
+}
+
+resource "aws_route53_record" "csportal-web-azc" {
+  // same number of records as instances
+  count   = "${var.num_instances_web_azc}"
+  zone_id = "${aws_route53_zone.sportal.zone_id}"
+  name    = "${format("csportal-web%02d",count.index+7)}"
+  type    = "A"
+  ttl     = "300"
+  // matches up record N to instance N
+  records = ["${element(aws_instance.csportal-web-azc.*.private_ip, count.index)}"]
+}
 
 resource "aws_elb" "sportal_web_elb" {
   name            = "sportal-webelb"
@@ -67,7 +86,7 @@ resource "aws_elb" "sportal_web_elb" {
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
   subnets   = ["${aws_subnet.webfe_subnet_a.id}", "${aws_subnet.webfe_subnet_b.id}", "${aws_subnet.webfe_subnet_c.id}"]
-  instances = ["${element(aws_instance.csportal-web.*.id, count.index)}"]
+  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
 
   health_check {
     healthy_threshold   = 2

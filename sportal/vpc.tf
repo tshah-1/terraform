@@ -8,26 +8,13 @@ resource "aws_vpc" "main" {
   }
 }
 
-variable "azs" {
-  type = "map"
-
-  default = {
-    "us-west-1"      = "us-west-1a,us-west-1b,us-west-1c"
-    "ap-southeast-1" = "ap-southeast-1a,ap-southeast-1b,ap-southeast-1c"
-    "ap-northeast-1" = "ap-northeast-1a,ap-northeast-1bap-northeast-1c"
-    "ca-central-1"   = "ca-central-1a,ca-central-1b,ca-central-1c"
-    "eu-central-1"   = "eu-central-1a,eu-central-1b,eu-central-1c"
-    "eu-west-3"      = "eu-west-3a,eu-west-3b,eu-west-3c"
-    "eu-west-1"      = "eu-west-1a,eu-west-1b,eu-west-1b"
-    "sa-east-1"      = "sa-east-1a,sa-east-1b,sa-east-1c"
-    "eu-west-2"      = "eu-west-2a,eu-west-2b,eu-west-2c"
-  }
-}
+data "aws_availability_zones" "available" {}
 
 resource "aws_subnet" "public_subnet_a" {
   vpc_id                  = "${aws_vpc.main.id}"
   cidr_block              = "172.24.0.0/24"
-  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
+#  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
+  availability_zone       = "${data.aws_availability_zones.available.names[0]}"
   map_public_ip_on_launch = "true"
 
   tags {
@@ -40,7 +27,8 @@ resource "aws_subnet" "public_subnet_a" {
 resource "aws_subnet" "webfe_subnet_a" {
   vpc_id                  = "${aws_vpc.main.id}"
   cidr_block              = "172.24.1.0/27"
-  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
+#  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
+  availability_zone       = "${data.aws_availability_zones.available.names[0]}"
 
   tags {
     Name = "sportal_webfe_a"
@@ -52,7 +40,8 @@ resource "aws_subnet" "webfe_subnet_a" {
 resource "aws_subnet" "webfe_subnet_b" {
   vpc_id                  = "${aws_vpc.main.id}"
   cidr_block              = "172.24.1.32/27"
-  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
+#  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
+  availability_zone       = "${data.aws_availability_zones.available.names[1]}"
   availability_zone       = "${terraform.workspace}b"
 
   tags {
@@ -65,7 +54,7 @@ resource "aws_subnet" "webfe_subnet_b" {
 resource "aws_subnet" "webfe_subnet_c" {
   vpc_id                  = "${aws_vpc.main.id}"
   cidr_block              = "172.24.1.64/27"
-  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
+  availability_zone       = "${data.aws_availability_zones.available.names[2]}"
   availability_zone       = "${terraform.workspace}c"
 
   tags {
@@ -78,7 +67,7 @@ resource "aws_subnet" "webfe_subnet_c" {
 resource "aws_subnet" "cms_subnet_a" {
   vpc_id                  = "${aws_vpc.main.id}"
   cidr_block              = "172.24.1.96/27"
-  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index +1)}"
+  availability_zone       = "${data.aws_availability_zones.available.names[0]}"
 
   tags {
     Name = "sportal_cms_a"
@@ -90,7 +79,7 @@ resource "aws_subnet" "cms_subnet_a" {
 resource "aws_subnet" "cms_subnet_b" {
   vpc_id                  = "${aws_vpc.main.id}"
   cidr_block              = "172.24.1.128/27"
-  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
+  availability_zone       = "${data.aws_availability_zones.available.names[1]}"
 
   tags {
     Name = "sportal_cms_b"
@@ -103,10 +92,10 @@ resource "aws_subnet" "cms_subnet_b" {
 resource "aws_subnet" "sportal_web_efs" {
   vpc_id            = "${aws_vpc.main.id}"
   cidr_block        = "172.24.1.160/27"
-  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
+  availability_zone       = "${data.aws_availability_zones.available.names[0]}"
 
   tags {
-    Name = "Sportal_web_efs"
+    Name = "sportal_web_efs"
     application = "sportal"
   }
 }
@@ -114,10 +103,10 @@ resource "aws_subnet" "sportal_web_efs" {
 resource "aws_subnet" "sportal_cms_efs" {
   vpc_id            = "${aws_vpc.main.id}"
   cidr_block        = "172.24.1.192/27"
-  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index+2)}"
+  availability_zone       = "${data.aws_availability_zones.available.names[1]}"
 
   tags {
-    Name = "Sportal_cms_efs"
+    Name = "sportal_cms_efs"
     application = "sportal"
   }
 }

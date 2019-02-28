@@ -8,11 +8,6 @@ output "ansible_ip" {
   value       = "${aws_instance.Sportal_Ansible_Host.public_ip}"
 }
 
-output "csportal-web_public_ip" {
-  description = "Public IP of instance (or EIP)"
-  value       = "${aws_instance.csportal-web.*.public_ip}"
-}
-
 output "dns_nameserver" {
   description = "name of private zone name servers"
   value       = "${aws_route53_zone.sportal.name_servers}"
