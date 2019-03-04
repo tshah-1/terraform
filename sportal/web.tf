@@ -1,9 +1,11 @@
 variable "num_instances_web_aza" {
   default = 3
 }
+
 variable "num_instances_web_azb" {
   default = 3
 }
+
 variable "num_instances_web_azc" {
   default = 2
 }
@@ -28,6 +30,7 @@ resource "aws_route53_record" "csportal-web-aza" {
   name    = "${format("csportal-web%02d",count.index+1)}"
   type    = "A"
   ttl     = "300"
+
   // matches up record N to instance N
   records = ["${element(aws_instance.csportal-web-aza.*.private_ip, count.index)}"]
 }
@@ -52,6 +55,7 @@ resource "aws_route53_record" "csportal-web-azb" {
   name    = "${format("csportal-web%02d",count.index+4)}"
   type    = "A"
   ttl     = "300"
+
   // matches up record N to instance N
   records = ["${element(aws_instance.csportal-web-azb.*.private_ip, count.index)}"]
 }
@@ -76,6 +80,7 @@ resource "aws_route53_record" "csportal-web-azc" {
   name    = "${format("csportal-web%02d",count.index+7)}"
   type    = "A"
   ttl     = "300"
+
   // matches up record N to instance N
   records = ["${element(aws_instance.csportal-web-azc.*.private_ip, count.index)}"]
 }

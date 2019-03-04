@@ -13,7 +13,15 @@ output "dns_nameserver" {
   value       = "${aws_route53_zone.sportal.name_servers}"
 }
 
-#output "openvpn_ip" {
-#  description = "OpenVPN Host Elastic IP"
-#  value       = "${aws_instance.openvpn.public_ip}"
-#}
+output "openvpn_ip" {
+  description = "OpenVPN Host Elastic IP"
+  value       = "${aws_instance.openvpn.public_ip}"
+}
+
+output "efs_web_dns" {
+  value = "${aws_efs_file_system.sportal-web.dns_name}"
+}
+
+output "efs_cms_dns" {
+  value = "${aws_efs_file_system.sportal-cms.dns_name}"
+}

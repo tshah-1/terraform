@@ -16,7 +16,7 @@ resource "aws_route53_zone" "sportal" {
 }
 
 resource "aws_vpc_dhcp_options" "sportal" {
-  domain_name = "${var.zonename}"
+  domain_name         = "${var.zonename}"
   domain_name_servers = ["AmazonProvidedDNS"]
 }
 

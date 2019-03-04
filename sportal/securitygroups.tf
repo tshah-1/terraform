@@ -39,7 +39,7 @@ resource "aws_security_group" "sportal_web" {
     to_port         = 22
     protocol        = "tcp"
     self            = true
-}
+  }
 
   egress {
     from_port   = 0
@@ -54,9 +54,9 @@ resource "aws_security_group" "sportal_web" {
   }
 }
 
-resource "aws_security_group" "sportal_efs" {
-  name        = "sportal_efs"
-  description = "Sportal Efs access SG"
+resource "aws_security_group" "sportal_web_efs" {
+  name        = "sportal_web_efs"
+  description = "Sportal Web Efs access SG"
   vpc_id      = "${aws_vpc.main.id}"
 
   # allow NFS traffic 
@@ -68,7 +68,26 @@ resource "aws_security_group" "sportal_efs" {
   }
 
   tags {
-    Name        = "Sportal EFS SG"
+    Name        = "Sportal Web EFS SG"
+    Application = "sportal"
+  }
+}
+
+resource "aws_security_group" "sportal_cms_efs" {
+  name        = "sportal_cms_efs"
+  description = "Sportal CMS Efs access SG"
+  vpc_id      = "${aws_vpc.main.id}"
+
+  # allow NFS traffic
+  ingress {
+    security_groups = ["${aws_security_group.sportal_cms.id}"]
+    from_port       = 2049
+    to_port         = 2049
+    protocol        = "tcp"
+  }
+
+  tags {
+    Name        = "Sportal cms EFS SG"
     Application = "sportal"
   }
 }

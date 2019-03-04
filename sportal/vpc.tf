@@ -1,5 +1,5 @@
 resource "aws_vpc" "main" {
-  cidr_block           = "172.24.0.0/20"
+  cidr_block           = "172.24.0.0/23"
   enable_dns_support   = true
   enable_dns_hostnames = true
 
@@ -11,102 +11,148 @@ resource "aws_vpc" "main" {
 data "aws_availability_zones" "available" {}
 
 resource "aws_subnet" "public_subnet_a" {
-  vpc_id                  = "${aws_vpc.main.id}"
-  cidr_block              = "172.24.0.0/24"
-#  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
+  vpc_id     = "${aws_vpc.main.id}"
+  cidr_block = "172.24.0.0/24"
+
+  #  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
   availability_zone       = "${data.aws_availability_zones.available.names[0]}"
   map_public_ip_on_launch = "true"
 
   tags {
-    Name = "Sportal_mgmt"
+    Name        = "Sportal_mgmt"
     application = "sportal"
-    Tier = "mgmt"
+    Tier        = "mgmt"
   }
 }
 
 resource "aws_subnet" "webfe_subnet_a" {
-  vpc_id                  = "${aws_vpc.main.id}"
-  cidr_block              = "172.24.1.0/27"
-#  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
-  availability_zone       = "${data.aws_availability_zones.available.names[0]}"
+  vpc_id     = "${aws_vpc.main.id}"
+  cidr_block = "172.24.1.0/28"
+
+  #  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
+  availability_zone = "${data.aws_availability_zones.available.names[0]}"
 
   tags {
-    Name = "sportal_webfe_a"
+    Name        = "sportal_webfe_a"
     application = "sportal"
-    Tier = "Webfe"
+    Tier        = "Webfe"
   }
 }
 
 resource "aws_subnet" "webfe_subnet_b" {
-  vpc_id                  = "${aws_vpc.main.id}"
-  cidr_block              = "172.24.1.32/27"
-#  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
-  availability_zone       = "${data.aws_availability_zones.available.names[1]}"
-  availability_zone       = "${terraform.workspace}b"
+  vpc_id     = "${aws_vpc.main.id}"
+  cidr_block = "172.24.1.16/28"
+
+  #  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
+  availability_zone = "${data.aws_availability_zones.available.names[1]}"
+  availability_zone = "${terraform.workspace}b"
 
   tags {
-    Name = "sportal_webfe_b"
+    Name        = "sportal_webfe_b"
     application = "sportal"
-    Tier = "Webfe"
+    Tier        = "Webfe"
   }
 }
 
 resource "aws_subnet" "webfe_subnet_c" {
-  vpc_id                  = "${aws_vpc.main.id}"
-  cidr_block              = "172.24.1.64/27"
-  availability_zone       = "${data.aws_availability_zones.available.names[2]}"
-  availability_zone       = "${terraform.workspace}c"
+  vpc_id            = "${aws_vpc.main.id}"
+  cidr_block        = "172.24.1.32/28"
+  availability_zone = "${data.aws_availability_zones.available.names[2]}"
+  availability_zone = "${terraform.workspace}c"
 
   tags {
-    Name = "sportal_webfe_c"
+    Name        = "sportal_webfe_c"
     application = "sportal"
-    Tier = "Webfe"
+    Tier        = "Webfe"
   }
 }
 
 resource "aws_subnet" "cms_subnet_a" {
-  vpc_id                  = "${aws_vpc.main.id}"
-  cidr_block              = "172.24.1.96/27"
-  availability_zone       = "${data.aws_availability_zones.available.names[0]}"
+  vpc_id            = "${aws_vpc.main.id}"
+  cidr_block        = "172.24.1.48/28"
+  availability_zone = "${data.aws_availability_zones.available.names[0]}"
 
   tags {
-    Name = "sportal_cms_a"
+    Name        = "sportal_cms_a"
     application = "sportal"
-    Tier = "Cms"
+    Tier        = "Cms"
   }
 }
 
 resource "aws_subnet" "cms_subnet_b" {
-  vpc_id                  = "${aws_vpc.main.id}"
-  cidr_block              = "172.24.1.128/27"
-  availability_zone       = "${data.aws_availability_zones.available.names[1]}"
+  vpc_id            = "${aws_vpc.main.id}"
+  cidr_block        = "172.24.1.64/28"
+  availability_zone = "${data.aws_availability_zones.available.names[1]}"
 
   tags {
-    Name = "sportal_cms_b"
+    Name        = "sportal_cms_b"
     application = "sportal"
-    Tier = "Cms"
+    Tier        = "Cms"
   }
 }
 
-
-resource "aws_subnet" "sportal_web_efs" {
+resource "aws_subnet" "sportal_web_efs_a" {
   vpc_id            = "${aws_vpc.main.id}"
-  cidr_block        = "172.24.1.160/27"
-  availability_zone       = "${data.aws_availability_zones.available.names[0]}"
+  cidr_block        = "172.24.1.80/28"
+  availability_zone = "${data.aws_availability_zones.available.names[0]}"
 
   tags {
-    Name = "sportal_web_efs"
+    Name        = "sportal_web_efs_a"
     application = "sportal"
   }
 }
 
-resource "aws_subnet" "sportal_cms_efs" {
+resource "aws_subnet" "sportal_web_efs_b" {
   vpc_id            = "${aws_vpc.main.id}"
-  cidr_block        = "172.24.1.192/27"
-  availability_zone       = "${data.aws_availability_zones.available.names[1]}"
+  cidr_block        = "172.24.1.96/28"
+  availability_zone = "${data.aws_availability_zones.available.names[1]}"
 
   tags {
-    Name = "sportal_cms_efs"
+    Name        = "sportal_web_efs_b"
+    application = "sportal"
+  }
+}
+
+resource "aws_subnet" "sportal_web_efs_c" {
+  vpc_id            = "${aws_vpc.main.id}"
+  cidr_block        = "172.24.1.112/28"
+  availability_zone = "${data.aws_availability_zones.available.names[2]}"
+
+  tags {
+    Name        = "sportal_web_efs_c"
+    application = "sportal"
+  }
+}
+
+resource "aws_subnet" "sportal_cms_efs_a" {
+  vpc_id            = "${aws_vpc.main.id}"
+  cidr_block        = "172.24.1.128/28"
+  availability_zone = "${data.aws_availability_zones.available.names[0]}"
+
+  tags {
+    Name        = "sportal_cms_efs_a"
+    application = "sportal"
+  }
+}
+
+resource "aws_subnet" "sportal_cms_efs_b" {
+  vpc_id            = "${aws_vpc.main.id}"
+  cidr_block        = "172.24.1.144/28"
+  availability_zone = "${data.aws_availability_zones.available.names[1]}"
+
+  tags {
+    Name        = "sportal_cms_efs_b"
+    application = "sportal"
+  }
+}
+
+resource "aws_subnet" "sportal_cms_efs_c" {
+  vpc_id            = "${aws_vpc.main.id}"
+  cidr_block        = "172.24.1.160/28"
+  availability_zone = "${data.aws_availability_zones.available.names[2]}"
+
+  tags {
+    Name        = "sportal_cms_efs_c"
     application = "sportal"
   }
 }
@@ -115,7 +161,7 @@ resource "aws_internet_gateway" "main-ig" {
   vpc_id = "${aws_vpc.main.id}"
 
   tags {
-    Name = "main IG"
+    Name        = "main IG"
     application = "sportal"
   }
 }
