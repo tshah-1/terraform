@@ -12,7 +12,7 @@ data "aws_subnet_ids" "cms" {
 }
 
 resource "aws_instance" "csportal-cms-a" {
-  ami                    = "ami-0eab3a90fc693af19"
+  ami                    = "${var.images["${terraform.workspace}"]}"
   key_name               = "${var.keys["${terraform.workspace}"]}"
   instance_type          = "t3.xlarge"
   vpc_security_group_ids = ["${aws_security_group.sportal_cms.id}"]
@@ -37,7 +37,7 @@ resource "aws_route53_record" "csportal-cms-a" {
 }
 
 resource "aws_instance" "csportal-cms-b" {
-  ami                    = "ami-0eab3a90fc693af19"
+  ami                    = "${var.images["${terraform.workspace}"]}"
   key_name               = "${var.keys["${terraform.workspace}"]}"
   instance_type          = "t3.xlarge"
   vpc_security_group_ids = ["${aws_security_group.sportal_cms.id}"]
