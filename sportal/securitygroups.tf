@@ -61,7 +61,7 @@ resource "aws_security_group" "sportal_web_efs" {
 
   # allow NFS traffic 
   ingress {
-    security_groups = ["${aws_security_group.sportal_web.id}"]
+    security_groups = ["${aws_security_group.sportal_cms.id}", "${aws_security_group.sportal_web.id}", "${aws_security_group.Ansible_SSH_Access.id}"]
     from_port       = 2049
     to_port         = 2049
     protocol        = "tcp"
@@ -80,7 +80,7 @@ resource "aws_security_group" "sportal_cms_efs" {
 
   # allow NFS traffic
   ingress {
-    security_groups = ["${aws_security_group.sportal_cms.id}"]
+    security_groups = ["${aws_security_group.sportal_cms.id}", "${aws_security_group.Ansible_SSH_Access.id}"]
     from_port       = 2049
     to_port         = 2049
     protocol        = "tcp"
@@ -102,7 +102,7 @@ resource "aws_security_group" "Ansible_SSH_Access" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["62.253.83.190/32", "82.11.218.115/32", "82.25.7.144/32", "82.27.144.252/32", "109.73.148.70/32"]
+    cidr_blocks = ["62.253.83.190/32", "82.11.218.115/32", "82.25.7.144/32", "82.27.144.252/32", "109.73.148.70/32", "185.42.236.254/32"]
   }
 
   egress {

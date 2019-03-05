@@ -1,18 +1,3 @@
-variable "images" {
-  type = "map"
-
-  default = {
-    "us-west-1"      = "ami-4826c22b"
-    "ap-southeast-1" = "ami-8e0205f2"
-    "ap-northeast-1" = "ami-8e8847f1"
-    "ca-central-1"   = "ami-e802818c"
-    "eu-central-1"   = "ami-01aeb888da1380a31"
-    "eu-west-3"      = "ami-262e9f5b"
-    "sa-east-1"      = "ami-cb5803a7"
-    "eu-west-2"      = "ami-0eab3a90fc693af19"
-  }
-}
-
 variable "keys" {
   type = "map"
 

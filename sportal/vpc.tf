@@ -186,25 +186,54 @@ resource "aws_route_table_association" "public_subnet_a" {
 
 resource "aws_route_table_association" "webfe_subnet_a" {
   subnet_id      = "${aws_subnet.webfe_subnet_a.id}"
-  route_table_id = "${aws_route_table.public_routetable.id}"
+  route_table_id = "${aws_route_table.private_routetable.id}"
 }
 
 resource "aws_route_table_association" "webfe_subnet_b" {
   subnet_id      = "${aws_subnet.webfe_subnet_b.id}"
-  route_table_id = "${aws_route_table.public_routetable.id}"
+  route_table_id = "${aws_route_table.private_routetable.id}"
 }
 
 resource "aws_route_table_association" "webfe_subnet_c" {
   subnet_id      = "${aws_subnet.webfe_subnet_c.id}"
-  route_table_id = "${aws_route_table.public_routetable.id}"
+  route_table_id = "${aws_route_table.private_routetable.id}"
 }
 
 resource "aws_route_table_association" "cms_subnet_a" {
   subnet_id      = "${aws_subnet.cms_subnet_a.id}"
-  route_table_id = "${aws_route_table.public_routetable.id}"
+  route_table_id = "${aws_route_table.private_routetable.id}"
 }
 
 resource "aws_route_table_association" "cms_subnet_b" {
   subnet_id      = "${aws_subnet.cms_subnet_b.id}"
-  route_table_id = "${aws_route_table.public_routetable.id}"
+  route_table_id = "${aws_route_table.private_routetable.id}"
+}
+
+resource "aws_eip" "main-nat" {
+vpc      = true
+}
+
+resource "aws_eip" "nat" {
+	vpc			= true
+}
+
+resource "aws_nat_gateway" "nat" {
+	allocation_id		= "${aws_eip.nat.id}"
+	subnet_id		= "${aws_subnet.public_subnet_a.id}"
+	tags {
+		Name		= "main VPC NAT"
+	}
+}
+
+resource "aws_route_table" "private_routetable" {
+	vpc_id			= "${aws_vpc.main.id}"
+
+	route {
+		cidr_block	= "0.0.0.0/0"
+		nat_gateway_id	= "${aws_nat_gateway.nat.id}"
+	}
+
+	tags {
+		label 		= "Sportal"
+	}
 }
