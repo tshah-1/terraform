@@ -20,7 +20,7 @@ resource "aws_subnet" "public_subnet_a" {
 
   tags {
     Name        = "Sportal_mgmt"
-    application = "sportal"
+    Application = "sportal"
     Tier        = "mgmt"
   }
 }
@@ -31,10 +31,11 @@ resource "aws_subnet" "webfe_subnet_a" {
 
   #  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
   availability_zone = "${data.aws_availability_zones.available.names[0]}"
+  map_public_ip_on_launch = "true"
 
   tags {
     Name        = "sportal_webfe_a"
-    application = "sportal"
+    Application = "sportal"
     Tier        = "Webfe"
   }
 }
@@ -46,10 +47,11 @@ resource "aws_subnet" "webfe_subnet_b" {
   #  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
   availability_zone = "${data.aws_availability_zones.available.names[1]}"
   availability_zone = "${terraform.workspace}b"
+  map_public_ip_on_launch = "true"
 
   tags {
     Name        = "sportal_webfe_b"
-    application = "sportal"
+    Application = "sportal"
     Tier        = "Webfe"
   }
 }
@@ -59,10 +61,11 @@ resource "aws_subnet" "webfe_subnet_c" {
   cidr_block        = "172.24.1.32/28"
   availability_zone = "${data.aws_availability_zones.available.names[2]}"
   availability_zone = "${terraform.workspace}c"
+  map_public_ip_on_launch = "true"
 
   tags {
     Name        = "sportal_webfe_c"
-    application = "sportal"
+    Application = "sportal"
     Tier        = "Webfe"
   }
 }
@@ -71,10 +74,11 @@ resource "aws_subnet" "cms_subnet_a" {
   vpc_id            = "${aws_vpc.main.id}"
   cidr_block        = "172.24.1.48/28"
   availability_zone = "${data.aws_availability_zones.available.names[0]}"
+  map_public_ip_on_launch = "true"
 
   tags {
     Name        = "sportal_cms_a"
-    application = "sportal"
+    Application = "sportal"
     Tier        = "Cms"
   }
 }
@@ -83,10 +87,11 @@ resource "aws_subnet" "cms_subnet_b" {
   vpc_id            = "${aws_vpc.main.id}"
   cidr_block        = "172.24.1.64/28"
   availability_zone = "${data.aws_availability_zones.available.names[1]}"
+  map_public_ip_on_launch = "true"
 
   tags {
     Name        = "sportal_cms_b"
-    application = "sportal"
+    Application = "sportal"
     Tier        = "Cms"
   }
 }
@@ -98,7 +103,7 @@ resource "aws_subnet" "sportal_web_efs_a" {
 
   tags {
     Name        = "sportal_web_efs_a"
-    application = "sportal"
+    Application = "sportal"
   }
 }
 
@@ -109,7 +114,7 @@ resource "aws_subnet" "sportal_web_efs_b" {
 
   tags {
     Name        = "sportal_web_efs_b"
-    application = "sportal"
+    Application = "sportal"
   }
 }
 
@@ -120,7 +125,7 @@ resource "aws_subnet" "sportal_web_efs_c" {
 
   tags {
     Name        = "sportal_web_efs_c"
-    application = "sportal"
+    Application = "sportal"
   }
 }
 
@@ -131,7 +136,7 @@ resource "aws_subnet" "sportal_cms_efs_a" {
 
   tags {
     Name        = "sportal_cms_efs_a"
-    application = "sportal"
+    Application = "sportal"
   }
 }
 
@@ -142,7 +147,7 @@ resource "aws_subnet" "sportal_cms_efs_b" {
 
   tags {
     Name        = "sportal_cms_efs_b"
-    application = "sportal"
+    Application = "sportal"
   }
 }
 
@@ -153,7 +158,7 @@ resource "aws_subnet" "sportal_cms_efs_c" {
 
   tags {
     Name        = "sportal_cms_efs_c"
-    application = "sportal"
+    Application = "sportal"
   }
 }
 
@@ -162,7 +167,7 @@ resource "aws_internet_gateway" "main-ig" {
 
   tags {
     Name        = "main IG"
-    application = "sportal"
+    Application = "sportal"
   }
 }
 
@@ -186,27 +191,27 @@ resource "aws_route_table_association" "public_subnet_a" {
 
 resource "aws_route_table_association" "webfe_subnet_a" {
   subnet_id      = "${aws_subnet.webfe_subnet_a.id}"
-  route_table_id = "${aws_route_table.private_routetable.id}"
+  route_table_id = "${aws_route_table.public_routetable.id}"
 }
 
 resource "aws_route_table_association" "webfe_subnet_b" {
   subnet_id      = "${aws_subnet.webfe_subnet_b.id}"
-  route_table_id = "${aws_route_table.private_routetable.id}"
+  route_table_id = "${aws_route_table.public_routetable.id}"
 }
 
 resource "aws_route_table_association" "webfe_subnet_c" {
   subnet_id      = "${aws_subnet.webfe_subnet_c.id}"
-  route_table_id = "${aws_route_table.private_routetable.id}"
+  route_table_id = "${aws_route_table.public_routetable.id}"
 }
 
 resource "aws_route_table_association" "cms_subnet_a" {
   subnet_id      = "${aws_subnet.cms_subnet_a.id}"
-  route_table_id = "${aws_route_table.private_routetable.id}"
+  route_table_id = "${aws_route_table.public_routetable.id}"
 }
 
 resource "aws_route_table_association" "cms_subnet_b" {
   subnet_id      = "${aws_subnet.cms_subnet_b.id}"
-  route_table_id = "${aws_route_table.private_routetable.id}"
+  route_table_id = "${aws_route_table.public_routetable.id}"
 }
 
 resource "aws_eip" "main-nat" {
@@ -236,4 +241,52 @@ resource "aws_route_table" "private_routetable" {
 	tags {
 		label 		= "Sportal"
 	}
+}
+
+resource "aws_subnet" "db_subnet_a" {
+  vpc_id            = "${aws_vpc.main.id}"
+  cidr_block        = "172.24.2.0/28"
+  availability_zone = "${data.aws_availability_zones.available.names[0]}"
+
+  tags {
+    Name        = "db_subnet_a"
+    Application = "sportal"
+  }
+}
+
+resource "aws_subnet" "db_subnet_b" {
+  vpc_id            = "${aws_vpc.main.id}"
+  cidr_block        = "172.24.2.16/28"
+  availability_zone = "${data.aws_availability_zones.available.names[1]}"
+
+  tags {
+    Name        = "db_subnet_b"
+    Application = "sportal"
+  }
+}
+
+resource "aws_subnet" "db_subnet_c" {
+  vpc_id            = "${aws_vpc.main.id}"
+  cidr_block        = "172.24.2.32/28"
+  availability_zone = "${data.aws_availability_zones.available.names[2]}"
+
+  tags {
+    Name        = "db_subnet_c"
+    Application = "sportal"
+  }
+}
+
+resource "aws_route_table_association" "db_subnet_a" {
+  subnet_id      = "${aws_subnet.db_subnet_a.id}"
+  route_table_id = "${aws_route_table.private_routetable.id}"
+}
+
+resource "aws_route_table_association" "db_subnet_b" {
+  subnet_id      = "${aws_subnet.db_subnet_b.id}"
+  route_table_id = "${aws_route_table.private_routetable.id}"
+}
+
+resource "aws_route_table_association" "db_subnet_c" {
+  subnet_id      = "${aws_subnet.db_subnet_c.id}"
+  route_table_id = "${aws_route_table.private_routetable.id}"
 }

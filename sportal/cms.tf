@@ -11,7 +11,7 @@ data "aws_subnet_ids" "cms" {
   }
 }
 
-resource "aws_instance" "csportal-cms-a" {
+resource "aws_instance" "csportal-cms-aza" {
   ami                    = "${var.images["${terraform.workspace}"]}"
   key_name               = "${var.keys["${terraform.workspace}"]}"
   instance_type          = "t3.xlarge"
@@ -33,10 +33,10 @@ resource "aws_route53_record" "csportal-cms-a" {
   ttl     = "300"
 
   // matches up record N to instance N
-  records = ["${element(aws_instance.csportal-cms-a.*.private_ip, count.index)}"]
+  records = ["${element(aws_instance.csportal-cms-aza.*.private_ip, count.index)}"]
 }
 
-resource "aws_instance" "csportal-cms-b" {
+resource "aws_instance" "csportal-cms-azb" {
   ami                    = "${var.images["${terraform.workspace}"]}"
   key_name               = "${var.keys["${terraform.workspace}"]}"
   instance_type          = "t3.xlarge"
@@ -58,5 +58,36 @@ resource "aws_route53_record" "csportal-cms-b" {
   ttl     = "300"
 
   // matches up record N to instance N
-  records = ["${element(aws_instance.csportal-cms-b.*.private_ip, count.index)}"]
+  records = ["${element(aws_instance.csportal-cms-azb.*.private_ip, count.index)}"]
+}
+
+resource "aws_elb" "sportal_cms_elb" {
+  name            = "sportal-cms-elb"
+  security_groups = ["${aws_security_group.sportal_cms_elb.id}"]
+
+  #  availability_zones = ["${data.aws_availability_zones.all.names}"]
+  subnets   = ["${aws_subnet.cms_subnet_a.id}", "${aws_subnet.cms_subnet_b.id}"]
+  instances = ["${aws_instance.csportal-cms-aza.*.id}", "${aws_instance.csportal-cms-azb.*.id}"]
+
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 3
+    interval            = 30
+    target              = "HTTP:80/"
+  }
+
+  listener {
+    lb_port           = 80
+    lb_protocol       = "http"
+    instance_port     = "80"
+    instance_protocol = "http"
+  }
+
+  #  listener {
+  #    lb_port = 443
+  #    lb_protocol = "https"
+  #    instance_port = "443"
+  #    instance_protocol = "https"
+  #  }
 }

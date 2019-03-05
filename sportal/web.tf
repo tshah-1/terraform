@@ -17,6 +17,7 @@ resource "aws_instance" "csportal-web-aza" {
   vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
   subnet_id              = "${aws_subnet.webfe_subnet_a.id}"
   count                  = "${var.num_instances_web_aza}"
+  associate_public_ip_address = "true"
 
   tags {
     Name = "${format("csportal-web%02d",count.index+1)}"
@@ -42,6 +43,7 @@ resource "aws_instance" "csportal-web-azb" {
   vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
   subnet_id              = "${aws_subnet.webfe_subnet_b.id}"
   count                  = "${var.num_instances_web_azb}"
+  associate_public_ip_address = "true"
 
   tags {
     Name = "${format("csportal-web%02d",count.index+4)}"
@@ -67,6 +69,7 @@ resource "aws_instance" "csportal-web-azc" {
   vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
   subnet_id              = "${aws_subnet.webfe_subnet_c.id}"
   count                  = "${var.num_instances_web_azc}"
+  associate_public_ip_address = "true"
 
   tags {
     Name = "${format("csportal-web%02d",count.index+7)}"

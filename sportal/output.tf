@@ -25,3 +25,7 @@ output "efs_web_dns" {
 output "efs_cms_dns" {
   value = "${aws_efs_file_system.sportal-cms.dns_name}"
 }
+
+output "db_cluster_address" {
+    value = "${aws_rds_cluster.sportal-cluster.endpoint}"
+}

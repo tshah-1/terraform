@@ -281,3 +281,22 @@ resource "aws_security_group" "sportal_cms_elb" {
     Application = "sportal"
   }
 }
+
+resource "aws_security_group" "sportal_db" {
+  name        = "sportal_dg"
+  description = "Sportal DB access SG"
+  vpc_id      = "${aws_vpc.main.id}"
+
+  # allow traffic to MYSQL port
+  ingress {
+    security_groups = ["${aws_security_group.sportal_cms.id}", "${aws_security_group.sportal_web.id}", "${aws_security_group.Ansible_SSH_Access.id}"]
+    from_port   = 3306 
+    to_port     = 3360
+    protocol    = "tcp"
+  }
+
+  tags {
+    Name        = "Sportal DB SG"
+    Application = "sportal"
+  }
+}

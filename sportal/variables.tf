@@ -35,3 +35,15 @@ variable "images" {
     "sa-east-1"      = "ami-cb5803a7"
   }
 }
+
+variable "environment_name" {
+    description = "The name of the environment"
+}
+
+variable "rds_master_username" {
+  description = "The ID's of the VPC subnets that the RDS cluster instances will be created in"
+}
+
+variable "rds_master_password" {
+  description = "The ID's of the VPC subnets that the RDS cluster instances will be created in"
+}
