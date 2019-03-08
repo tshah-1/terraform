@@ -203,6 +203,14 @@ resource "aws_security_group" "sportal_cms" {
     self            = true
   }
 
+  ingress {
+    security_groups = ["${aws_security_group.openvpn.id}"]
+    from_port       = 81
+    to_port         = 81
+    protocol        = "tcp"
+    self            = true
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
