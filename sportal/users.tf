@@ -3,6 +3,11 @@ resource "aws_iam_user" "gernotheschl" {
   path = "/"
 }
 
+resource "aws_iam_user" "chrismuzyunda" {
+  name = "chris.muzyunda"
+  path = "/"
+}
+
 resource "aws_iam_group" "admin-users" {
   name = "admin-users"
   path = "/"
@@ -13,6 +18,7 @@ resource "aws_iam_group_membership" "admin-user-membership" {
 
   users = [
     "${aws_iam_user.gernotheschl.name}",
+    "${aws_iam_user.chrismuzyunda.name}",
   ]
 
   group = "${aws_iam_group.admin-users.name}"

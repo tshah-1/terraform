@@ -34,9 +34,17 @@ resource "aws_security_group" "sportal_web" {
   }
 
   ingress {
+    security_groups = ["${aws_security_group.Ansible_SSH_Access.id}", "${aws_security_group.openvpn.id}"]
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    self            = true
+  }
+
+  ingress {
     security_groups = ["${aws_security_group.sportal_web_elb.id}"]
-    from_port       = 22
-    to_port         = 22
+    from_port       = 80
+    to_port         = 80
     protocol        = "tcp"
     self            = true
   }
@@ -227,6 +235,22 @@ resource "aws_security_group" "sportal_cms" {
     self            = true
   }
 
+  ingress {
+    security_groups = ["${aws_security_group.sportal_cms_elb.id}"]
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    self            = true
+  }
+
+  ingress {
+    security_groups = ["${aws_security_group.sportal_ftp_elb.id}"]
+    from_port       = 0
+    to_port         = 0
+    protocol        = "tcp"
+    self            = true
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -306,6 +330,45 @@ resource "aws_security_group" "sportal_cms_elb" {
   }
 }
 
+resource "aws_security_group" "sportal_ftp_elb" {
+  name        = "sportal_ftp_elb"
+  description = "Sportal FTP ELB access SG"
+  vpc_id      = "${aws_vpc.main.id}"
+
+  ingress {
+    from_port   = 21
+    to_port     = 21
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 20
+    to_port     = 20
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 1024
+    to_port     = 1048
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags {
+    Name        = "Sportal FTP ELB SG"
+    Application = "sportal"
+  }
+}
+
 resource "aws_security_group" "sportal_db" {
   name        = "sportal_dg"
   description = "Sportal DB access SG"
@@ -313,14 +376,41 @@ resource "aws_security_group" "sportal_db" {
 
   # allow traffic to MYSQL port
   ingress {
-    security_groups = ["${aws_security_group.sportal_cms.id}", "${aws_security_group.sportal_web.id}", "${aws_security_group.Ansible_SSH_Access.id}"]
-    from_port   = 3306 
-    to_port     = 3360
-    protocol    = "tcp"
+    security_groups = ["${aws_security_group.sportal_cms.id}", "${aws_security_group.sportal_web.id}", "${aws_security_group.Ansible_SSH_Access.id}", "${aws_security_group.openvpn.id}"]
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    self            = true
   }
 
   tags {
     Name        = "Sportal DB SG"
+    Application = "sportal"
+  }
+}
+
+resource "aws_security_group" "ops_monitoring" {
+  name        = "monitoring"
+  description = "Sportal monitoring access SG"
+  vpc_id      = "${aws_vpc.main.id}"
+
+  ingress {
+    security_groups = ["${aws_security_group.Ansible_SSH_Access.id}", "${aws_security_group.openvpn.id}"]
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    self            = true
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["82.25.7.144/32", "62.253.83.190/32", "109.73.148.70/32"]
+  }
+
+  tags {
+    Name        = "Sportal Monitoring SG"
     Application = "sportal"
   }
 }
