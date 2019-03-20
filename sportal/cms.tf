@@ -92,3 +92,10 @@ resource "aws_elb" "sportal_cms_elb" {
   #  }
 }
 
+resource "aws_eip" "csportal-cms-aza-eip" {
+  instance = "${aws_instance.csportal-cms-aza.id}"
+}
+
+resource "aws_eip" "csportal-cms-azb-eip" {
+  instance = "${aws_instance.csportal-cms-azb.id}"
+}
