@@ -197,6 +197,27 @@ resource "aws_security_group" "sportal_cms" {
   }
 
   ingress {
+    from_port   = 21
+    to_port     = 21
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 20
+    to_port     = 20
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 1024
+    to_port     = 1048
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -239,14 +260,6 @@ resource "aws_security_group" "sportal_cms" {
     security_groups = ["${aws_security_group.sportal_cms_elb.id}"]
     from_port       = 80
     to_port         = 80
-    protocol        = "tcp"
-    self            = true
-  }
-
-  ingress {
-    security_groups = ["${aws_security_group.sportal_ftp_elb.id}"]
-    from_port       = 0
-    to_port         = 0
     protocol        = "tcp"
     self            = true
   }
@@ -326,45 +339,6 @@ resource "aws_security_group" "sportal_cms_elb" {
 
   tags {
     Name        = "Sportal CMS ELB SG"
-    Application = "sportal"
-  }
-}
-
-resource "aws_security_group" "sportal_ftp_elb" {
-  name        = "sportal_ftp_elb"
-  description = "Sportal FTP ELB access SG"
-  vpc_id      = "${aws_vpc.main.id}"
-
-  ingress {
-    from_port   = 21
-    to_port     = 21
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 20
-    to_port     = 20
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 1024
-    to_port     = 1048
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags {
-    Name        = "Sportal FTP ELB SG"
     Application = "sportal"
   }
 }

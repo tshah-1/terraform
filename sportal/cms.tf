@@ -92,27 +92,3 @@ resource "aws_elb" "sportal_cms_elb" {
   #  }
 }
 
-resource "aws_elb" "sportal_ftp_elb" {
-  name            = "sportal-ftp-elb"
-  security_groups = ["${aws_security_group.sportal_ftp_elb.id}"]
-
-  #  availability_zones = ["${data.aws_availability_zones.all.names}"]
-  subnets   = ["${aws_subnet.cms_subnet_a.id}", "${aws_subnet.cms_subnet_b.id}"]
-  instances = ["${aws_instance.csportal-cms-aza.*.id}", "${aws_instance.csportal-cms-azb.*.id}"]
-
-  health_check {
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    timeout             = 5
-    interval            = 30
-    target              = "TCP:21"
-  }
-
-  listener {
-    lb_port           = 21
-    lb_protocol       = "TCP"
-    instance_port     = "21"
-    instance_protocol = "TCP"
-  }
-
-}
