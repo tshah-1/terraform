@@ -8,6 +8,26 @@ resource "aws_iam_user" "chrismuzyunda" {
   path = "/"
 }
 
+resource "aws_iam_user" "bernddielacher" {
+  name = "bernd.dielacher"
+  path = "/"
+}
+
+resource "aws_iam_user" "bostjanbele" {
+  name = "bostjan.bele"
+  path = "/"
+}
+
+resource "aws_iam_user" "haraldsaringer" {
+  name = "harald.saringer"
+  path = "/"
+}
+
+resource "aws_iam_user" "volkerhutten" {
+  name = "volker.hutten"
+  path = "/"
+}
+
 resource "aws_iam_group" "admin-users" {
   name = "admin-users"
   path = "/"
@@ -19,6 +39,10 @@ resource "aws_iam_group_membership" "admin-user-membership" {
   users = [
     "${aws_iam_user.gernotheschl.name}",
     "${aws_iam_user.chrismuzyunda.name}",
+    "${aws_iam_user.bernddielacher.name}",
+    "${aws_iam_user.bostjanbele.name}",
+    "${aws_iam_user.haraldsaringer.name}",
+    "${aws_iam_user.volkerhutten.name}",
   ]
 
   group = "${aws_iam_group.admin-users.name}"
