@@ -67,7 +67,7 @@ resource "aws_security_group" "sportal_web_efs" {
   description = "Sportal Web Efs access SG"
   vpc_id      = "${aws_vpc.main.id}"
 
-  # allow NFS traffic 
+  # allow NFS traffic
   ingress {
     security_groups = ["${aws_security_group.sportal_cms.id}", "${aws_security_group.sportal_web.id}", "${aws_security_group.Ansible_SSH_Access.id}"]
     from_port       = 2049
@@ -381,6 +381,13 @@ resource "aws_security_group" "ops_monitoring" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["82.25.7.144/32", "62.253.83.190/32", "109.73.148.70/32"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags {
