@@ -403,6 +403,13 @@ resource "aws_security_group" "ops_monitoring" {
     cidr_blocks = ["82.25.7.144/32", "62.253.83.190/32", "109.73.148.70/32"]
   }
 
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["109.73.148.70/32"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
