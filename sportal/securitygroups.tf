@@ -363,6 +363,26 @@ resource "aws_security_group" "sportal_db" {
   }
 }
 
+resource "aws_security_group" "ops_monitoring_db" {
+  name        = "ops_monitoring_sg"
+  description = "ops-monitoring DB access SG"
+  vpc_id      = "${aws_vpc.main.id}"
+
+  # allow traffic to MYSQL port
+  ingress {
+    security_groups = ["${aws_security_group.ops_monitoring.id}"]
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    self            = true
+  }
+
+  tags {
+    Name        = "ops-monitoring DB SG"
+    Application = "sportal"
+  }
+}
+
 resource "aws_security_group" "ops_monitoring" {
   name        = "monitoring"
   description = "Sportal monitoring access SG"
