@@ -1,5 +1,5 @@
 resource "aws_instance" "ops_monitoring" {
-                                  =
+
   ami                             = "ami-0a5f61c2d8cfc4bad"
   key_name                        = "${var.keys["${terraform.workspace}"]}"
   instance_type                   = "t2.xlarge"
