@@ -10,7 +10,7 @@ resource "aws_instance" "ops_monitoring" {
   # this inline shell script also works!
   provisioner "remote-exec" {
     inline = [
-      "echo '127.0.0.1 ${self.tags.Name}' | sudo tee -a /etc/hosts",
+      "echo '127.0.0.1	${self.tags.Name}' | sudo tee -a /etc/hosts",
       "sudo hostnamectl set-hostname ${self.tags.Name}",
     ]
   }
