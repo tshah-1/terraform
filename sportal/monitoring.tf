@@ -12,8 +12,6 @@ resource "aws_instance" "ops_monitoring" {
     inline = [
       "echo '127.0.0.1 ${self.tags.Name}' | sudo tee -a /etc/hosts",
       "sudo hostnamectl set-hostname ${self.tags.Name}",
-      # this will update hostname in swarm 
-      "sudo systemctl restart docker",
     ]
   }
 
