@@ -7,6 +7,16 @@ resource "aws_instance" "ops_monitoring" {
   subnet_id                       = "${aws_subnet.public_subnet_a.id}"
   count                           = "${var.num_instances_cms}"
 
+  # this inline shell script also works!
+  provisioner "remote-exec" {
+    inline = [
+      "echo '127.0.0.1 ${self.tags.Name}' | sudo tee -a /etc/hosts",
+      "sudo hostnamectl set-hostname ${self.tags.Name}",
+      # this will update hostname in swarm 
+      "sudo systemctl restart docker",
+    ]
+  }
+
   tags {
     Name                          = "${format("csportal-mon%02d",count.index+1)}"
   }
