@@ -200,21 +200,21 @@ resource "aws_security_group" "sportal_cms" {
     from_port   = 21
     to_port     = 21
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["91.201.212.0/23", "81.19.62.64/26", "81.19.48.109/32", "81.19.48.69/32", "213.86.2.16/28", "213.86.2.20/32"]
   }
 
   ingress {
     from_port   = 20
     to_port     = 20
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["91.201.212.0/23", "81.19.62.64/26", "81.19.48.109/32", "81.19.48.69/32", "213.86.2.16/28", "213.86.2.20/32"]
   }
 
   ingress {
     from_port   = 1024
     to_port     = 1048
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["91.201.212.0/23", "81.19.62.64/26", "81.19.48.109/32", "81.19.48.69/32", "213.86.2.16/28", "213.86.2.20/32"]
   }
 
   ingress {
