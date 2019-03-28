@@ -181,21 +181,6 @@ resource "aws_security_group" "sportal_cms" {
   description = "Sportal CMS Server access SG"
   vpc_id      = "${aws_vpc.main.id}"
 
-  # allow traffic to HTTP port
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   ingress {
     from_port   = 21
     to_port     = 21
@@ -222,6 +207,22 @@ resource "aws_security_group" "sportal_cms" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["${aws_eip.ansible_host_ip.public_ip}/32", "82.25.7.144/32", "62.253.83.190/32", "109.73.148.70/32"]
+  }
+
+  ingress {
+    security_groups = ["${aws_security_group.Ansible_SSH_Access.id}", "${aws_security_group.openvpn.id}", "${aws_security_group.sportal_cms_elb.id}"]
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    self            = true
+  }
+
+  ingress {
+    security_groups = ["${aws_security_group.Ansible_SSH_Access.id}", "${aws_security_group.openvpn.id}", "${aws_security_group.sportal_cms_elb.id}"]
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    self            = true
   }
 
   ingress {
