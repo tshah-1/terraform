@@ -5,10 +5,10 @@ resource "aws_security_group" "sportal_web" {
 
   # allow traffic to SNMP port
   ingress {
+    security_groups = ["${aws_security_group.ops_monitoring.id}"]
     from_port   = 161
     to_port     = 161
     protocol    = "tcp"
-    cidr_blocks = ["172.24.0.0/23"]
   }
 
 
@@ -192,10 +192,10 @@ resource "aws_security_group" "sportal_cms" {
 
   # allow traffic to SNMP port
   ingress {
+    security_groups = ["${aws_security_group.ops_monitoring.id}"]
     from_port   = 161
     to_port     = 161
     protocol    = "tcp"
-    cidr_blocks = ["172.24.0.0/23"]
   }
 
   ingress {
