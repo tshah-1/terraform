@@ -278,3 +278,35 @@ resource "aws_elb" "welt-sportal-de" {
       ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/ca0a50e5-e9c5-4990-a5aa-6ab22f584184"
     }
 }
+
+resource "aws_elb" "liveticker-stern-de" {
+  name            = "liveticker-stern-de-elb"
+  security_groups = ["${aws_security_group.sportal_web_elb.id}"]
+
+  #  availability_zones = ["${data.aws_availability_zones.all.names}"]
+  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 3
+    interval            = 30
+    target              = "TCP:85"
+  }
+
+  listener {
+    lb_port           = 80
+    lb_protocol       = "http"
+    instance_port     = "85"
+    instance_protocol = "http"
+  }
+
+    listener {
+      lb_port = 443
+      lb_protocol = "https"
+      instance_port = "448"
+      instance_protocol = "https"
+      ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/d29a35f4-ab63-4c6c-8857-41c0d7565eb6"
+    }
+}
