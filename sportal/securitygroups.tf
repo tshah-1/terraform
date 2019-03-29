@@ -12,21 +12,6 @@ resource "aws_security_group" "sportal_web" {
   }
 
 
-  # allow traffic to HTTP port
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   ingress {
     from_port   = 22
     to_port     = 22
@@ -51,7 +36,7 @@ resource "aws_security_group" "sportal_web" {
   }
 
   ingress {
-    security_groups = ["${aws_security_group.sportal_web_elb.id}"]
+    security_groups = ["${aws_security_group.sportal_web_elb.id}", "${aws_security_group.openvpn.id}"]
     from_port       = 80
     to_port         = 90
     protocol        = "tcp"
@@ -59,7 +44,7 @@ resource "aws_security_group" "sportal_web" {
   }
 
   ingress {
-    security_groups = ["${aws_security_group.sportal_web_elb.id}"]
+    security_groups = ["${aws_security_group.sportal_web_elb.id}", "${aws_security_group.openvpn.id}"]
     from_port       = 443
     to_port         = 453
     protocol        = "tcp"
