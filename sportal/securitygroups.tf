@@ -8,7 +8,7 @@ resource "aws_security_group" "sportal_web" {
     security_groups = ["${aws_security_group.ops_monitoring.id}"]
     from_port   = 161
     to_port     = 161
-    protocol    = "tcp"
+    protocol    = "udp"
   }
 
 
@@ -195,7 +195,7 @@ resource "aws_security_group" "sportal_cms" {
     security_groups = ["${aws_security_group.ops_monitoring.id}"]
     from_port   = 161
     to_port     = 161
-    protocol    = "tcp"
+    protocol    = "udp"
   }
 
   ingress {
