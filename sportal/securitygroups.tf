@@ -3,6 +3,15 @@ resource "aws_security_group" "sportal_web" {
   description = "Sportal Web Server access SG"
   vpc_id      = "${aws_vpc.main.id}"
 
+  # allow traffic to SNMP port
+  ingress {
+    from_port   = 161
+    to_port     = 161
+    protocol    = "tcp"
+    cidr_blocks = ["172.24.0.0/23"]
+  }
+
+
   # allow traffic to HTTP port
   ingress {
     from_port   = 443
@@ -180,6 +189,14 @@ resource "aws_security_group" "sportal_cms" {
   name        = "sportal_cms"
   description = "Sportal CMS Server access SG"
   vpc_id      = "${aws_vpc.main.id}"
+
+  # allow traffic to SNMP port
+  ingress {
+    from_port   = 161
+    to_port     = 161
+    protocol    = "tcp"
+    cidr_blocks = ["172.24.0.0/23"]
+  }
 
   ingress {
     from_port   = 21
