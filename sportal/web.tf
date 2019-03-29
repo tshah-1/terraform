@@ -118,3 +118,99 @@ resource "aws_elb" "sportal_web_elb" {
   #    instance_protocol = "https"
   #  }
 }
+
+resource "aws_elb" "wintersport-kleinezeitung-at" {
+  name            = "wintersport-kleinezeitung-at-elb"
+  security_groups = ["${aws_security_group.sportal_web_elb.id}"]
+
+  #  availability_zones = ["${data.aws_availability_zones.all.names}"]
+  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 3
+    interval            = 30
+    target              = "HTTP:81/"
+  }
+
+  listener {
+    lb_port           = 80
+    lb_protocol       = "http"
+    instance_port     = "81"
+    instance_protocol = "http"
+  }
+
+    listener {
+      lb_port = 443
+      lb_protocol = "https"
+      instance_port = "444"
+      instance_protocol = "https"
+      ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/9494a276-d29e-413c-9375-043e75ed47d1"
+    }
+}
+
+resource "aws_elb" "liveticker-sueddeutsche-de" {
+  name            = "liveticker-sueddeutsche-de-elb"
+  security_groups = ["${aws_security_group.sportal_web_elb.id}"]
+
+  #  availability_zones = ["${data.aws_availability_zones.all.names}"]
+  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 3
+    interval            = 30
+    target              = "HTTP:82/"
+  }
+
+  listener {
+    lb_port           = 80
+    lb_protocol       = "http"
+    instance_port     = "82"
+    instance_protocol = "http"
+  }
+
+    listener {
+      lb_port = 443
+      lb_protocol = "https"
+      instance_port = "445"
+      instance_protocol = "https"
+      ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/fb8d7199-d1a0-4cdf-8320-53fe5744d4d9"
+    }
+}
+
+resource "aws_elb" "sportdaten-welt-de" {
+  name            = "sportdaten-welt-de-elb"
+  security_groups = ["${aws_security_group.sportal_web_elb.id}"]
+
+  #  availability_zones = ["${data.aws_availability_zones.all.names}"]
+  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 3
+    interval            = 30
+    target              = "HTTP:84/"
+  }
+
+  listener {
+    lb_port           = 80
+    lb_protocol       = "http"
+    instance_port     = "84"
+    instance_protocol = "http"
+  }
+
+    listener {
+      lb_port = 443
+      lb_protocol = "https"
+      instance_port = "447"
+      instance_protocol = "https"
+      ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/02732ca7-7ff2-45fe-8d26-cf84bb8696fa"
+    }
+}

@@ -25,6 +25,51 @@ resource "aws_subnet" "public_subnet_a" {
   }
 }
 
+resource "aws_subnet" "webelbfe_subnet_a" {
+  vpc_id     = "${aws_vpc.main.id}"
+  cidr_block = "172.24.3.0/24"
+
+  #  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
+  availability_zone = "${data.aws_availability_zones.available.names[0]}"
+  map_public_ip_on_launch = "true"
+
+  tags {
+    Name        = "sportal_elbwebfe_a"
+    Application = "sportal"
+    Tier        = "Fe"
+  }
+}
+
+resource "aws_subnet" "webelbfe_subnet_b" {
+  vpc_id     = "${aws_vpc.main.id}"
+  cidr_block = "172.24.4.0/24"
+
+  #  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
+  availability_zone = "${data.aws_availability_zones.available.names[1]}"
+  map_public_ip_on_launch = "true"
+
+  tags {
+    Name        = "sportal_elbwebfe_b"
+    Application = "sportal"
+    Tier        = "Fe"
+  }
+}
+
+resource "aws_subnet" "webelbfe_subnet_c" {
+  vpc_id     = "${aws_vpc.main.id}"
+  cidr_block = "172.24.5.0/24"
+
+  #  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
+  availability_zone = "${data.aws_availability_zones.available.names[2]}"
+  map_public_ip_on_launch = "true"
+
+  tags {
+    Name        = "sportal_elbwebfe_c"
+    Application = "sportal"
+    Tier        = "Fe"
+  }
+}
+
 resource "aws_subnet" "webfe_subnet_a" {
   vpc_id     = "${aws_vpc.main.id}"
   cidr_block = "172.24.1.0/28"
@@ -182,6 +227,21 @@ resource "aws_route_table" "public_routetable" {
   tags {
     label = "Sportal"
   }
+}
+
+resource "aws_route_table_association" "webelbfe_subnet_a" {
+  subnet_id      = "${aws_subnet.webelbfe_subnet_a.id}"
+  route_table_id = "${aws_route_table.public_routetable.id}"
+}
+
+resource "aws_route_table_association" "webelbfe_subnet_b" {
+  subnet_id      = "${aws_subnet.webelbfe_subnet_b.id}"
+  route_table_id = "${aws_route_table.public_routetable.id}"
+}
+
+resource "aws_route_table_association" "webelbfe_subnet_c" {
+  subnet_id      = "${aws_subnet.webelbfe_subnet_c.id}"
+  route_table_id = "${aws_route_table.public_routetable.id}"
 }
 
 resource "aws_route_table_association" "public_subnet_a" {

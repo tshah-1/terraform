@@ -53,7 +53,15 @@ resource "aws_security_group" "sportal_web" {
   ingress {
     security_groups = ["${aws_security_group.sportal_web_elb.id}"]
     from_port       = 80
-    to_port         = 80
+    to_port         = 90
+    protocol        = "tcp"
+    self            = true
+  }
+
+  ingress {
+    security_groups = ["${aws_security_group.sportal_web_elb.id}"]
+    from_port       = 443
+    to_port         = 453
     protocol        = "tcp"
     self            = true
   }
