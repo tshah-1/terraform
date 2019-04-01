@@ -92,6 +92,13 @@ resource "aws_elb" "sportal_cms_elb" {
   #  }
 }
 
+resource "aws_lb_cookie_stickiness_policy" "sportal_cms_elb_persistence" {
+  name                     = "cms-cookie-persistence-policy"
+  load_balancer            = "${aws_elb.sportal_cms_elb.id}"
+  lb_port                  = 80
+  cookie_expiration_period = 3600
+}
+
 resource "aws_eip" "csportal-cms-aza-eip" {
   instance = "${aws_instance.csportal-cms-aza.id}"
 }
