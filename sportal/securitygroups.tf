@@ -8,7 +8,7 @@ resource "aws_security_group" "sportal_web" {
     from_port = -1
     to_port = -1
     protocol = "icmp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip}"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}"]
   }
 
   # allow traffic to SNMP port
@@ -16,7 +16,7 @@ resource "aws_security_group" "sportal_web" {
     from_port   = 161
     to_port     = 161
     protocol    = "udp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip}"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}"]
   }
 
   ingress {
@@ -119,7 +119,7 @@ resource "aws_security_group" "Ansible_SSH_Access" {
     from_port = -1
     to_port = -1
     protocol = "icmp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip}"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}"]
   }
 
   # allow traffic to SNMP port
@@ -127,7 +127,7 @@ resource "aws_security_group" "Ansible_SSH_Access" {
     from_port   = 161
     to_port     = 161
     protocol    = "udp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip}"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}"]
   }
 
   # allow traffic to SSH port
@@ -161,7 +161,7 @@ resource "aws_security_group" "openvpn" {
     from_port = -1
     to_port = -1
     protocol = "icmp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip}"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}"]
   }
 
   # allow traffic to SNMP port
@@ -169,7 +169,7 @@ resource "aws_security_group" "openvpn" {
     from_port   = 161
     to_port     = 161
     protocol    = "udp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip}"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}"]
   }
 
   # allow traffic to SSH port
@@ -227,7 +227,7 @@ resource "aws_security_group" "sportal_cms" {
     from_port = -1
     to_port = -1
     protocol = "icmp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip}"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}"]
   }
 
   # allow traffic to SNMP port
@@ -235,7 +235,7 @@ resource "aws_security_group" "sportal_cms" {
     from_port   = 161
     to_port     = 161
     protocol    = "udp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip}"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}"]
   }
 
   ingress {
@@ -459,7 +459,7 @@ resource "aws_security_group" "ops_monitoring" {
     from_port = -1
     to_port = -1
     protocol = "icmp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip}", "109.73.148.70/32"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}", "109.73.148.70/32"]
   }
 
   # allow traffic to SNMP port
@@ -467,7 +467,7 @@ resource "aws_security_group" "ops_monitoring" {
     from_port   = 161
     to_port     = 161
     protocol    = "udp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip}", "109.73.148.70/32"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}", "109.73.148.70/32"]
   }
 
   ingress {
