@@ -5,18 +5,18 @@ resource "aws_security_group" "sportal_web" {
 
   # allow ICMP
   ingress {
+    security_groups = ["${aws_security_group.ops_monitoring.id}", "${aws_security_group.openvpn.id}"]
     from_port = -1
     to_port = -1
     protocol = "icmp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32"]
   }
 
   # allow traffic to SNMP port
   ingress {
+    security_groups = ["${aws_security_group.ops_monitoring.id}"]
     from_port   = 161
     to_port     = 161
     protocol    = "udp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32"]
   }
 
   ingress {
@@ -114,22 +114,6 @@ resource "aws_security_group" "Ansible_SSH_Access" {
   description = "Ansible SSH access SG"
   vpc_id      = "${aws_vpc.main.id}"
 
-  # allow ICMP
-  ingress {
-    from_port = -1
-    to_port = -1
-    protocol = "icmp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32"]
-  }
-
-  # allow traffic to SNMP port
-  ingress {
-    from_port   = 161
-    to_port     = 161
-    protocol    = "udp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32"]
-  }
-
   # allow traffic to SSH port
   ingress {
     from_port   = 22
@@ -155,22 +139,6 @@ resource "aws_security_group" "openvpn" {
   name        = "openvpn-sg"
   description = "openvpn access SG"
   vpc_id      = "${aws_vpc.main.id}"
-
-  # allow ICMP
-  ingress {
-    from_port = -1
-    to_port = -1
-    protocol = "icmp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32"]
-  }
-
-  # allow traffic to SNMP port
-  ingress {
-    from_port   = 161
-    to_port     = 161
-    protocol    = "udp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32"]
-  }
 
   # allow traffic to SSH port
   ingress {
@@ -224,18 +192,18 @@ resource "aws_security_group" "sportal_cms" {
 
   # allow ICMP
   ingress {
+    security_groups = ["${aws_security_group.ops_monitoring.id}", "${aws_security_group.openvpn.id}"]
     from_port = -1
     to_port = -1
     protocol = "icmp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32"]
   }
 
   # allow traffic to SNMP port
   ingress {
+    security_groups = ["${aws_security_group.ops_monitoring.id}"]
     from_port   = 161
     to_port     = 161
     protocol    = "udp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32"]
   }
 
   ingress {
@@ -459,7 +427,7 @@ resource "aws_security_group" "ops_monitoring" {
     from_port = -1
     to_port = -1
     protocol = "icmp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip.public_ip}/32", "109.73.148.70/32"]
+    cidr_blocks = ["109.73.148.70/32"]
   }
 
   # allow traffic to SNMP port
@@ -467,7 +435,7 @@ resource "aws_security_group" "ops_monitoring" {
     from_port   = 161
     to_port     = 161
     protocol    = "udp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip.public_ip}/32", "109.73.148.70/32"]
+    cidr_blocks = ["109.73.148.70/32"]
   }
 
   ingress {
