@@ -114,6 +114,22 @@ resource "aws_security_group" "Ansible_SSH_Access" {
   description = "Ansible SSH access SG"
   vpc_id      = "${aws_vpc.main.id}"
 
+  # allow ICMP
+  ingress {
+    security_groups = ["${aws_security_group.ops_monitoring.id}", "${aws_security_group.openvpn.id}"]
+    from_port = -1
+    to_port = -1
+    protocol = "icmp"
+  }
+
+  # allow traffic to SNMP port
+  ingress {
+    security_groups = ["${aws_security_group.ops_monitoring.id}"]
+    from_port   = 161
+    to_port     = 161
+    protocol    = "udp"
+  }
+
   # allow traffic to SSH port
   ingress {
     from_port   = 22
@@ -139,6 +155,22 @@ resource "aws_security_group" "openvpn" {
   name        = "openvpn-sg"
   description = "openvpn access SG"
   vpc_id      = "${aws_vpc.main.id}"
+
+  # allow ICMP
+  ingress {
+    security_groups = ["${aws_security_group.ops_monitoring.id}", "${aws_security_group.openvpn.id}"]
+    from_port = -1
+    to_port = -1
+    protocol = "icmp"
+  }
+
+  # allow traffic to SNMP port
+  ingress {
+    security_groups = ["${aws_security_group.ops_monitoring.id}"]
+    from_port   = 161
+    to_port     = 161
+    protocol    = "udp"
+  }
 
   # allow traffic to SSH port
   ingress {
