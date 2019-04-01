@@ -27,7 +27,7 @@ resource "aws_security_group" "sportal_web" {
   }
 
   ingress {
-    security_groups = ["${aws_security_group.Ansible_SSH_Access.id}", "${aws_security_group.openvpn.id}"]
+    security_groups = ["${aws_security_group.Ansible_SSH_Access.id}", "${aws_security_group.openvpn.id}", "${aws_security_group.ops_monitoring.id}"]
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
@@ -251,7 +251,7 @@ resource "aws_security_group" "sportal_cms" {
   }
 
   ingress {
-    security_groups = ["${aws_security_group.Ansible_SSH_Access.id}", "${aws_security_group.openvpn.id}"]
+    security_groups = ["${aws_security_group.Ansible_SSH_Access.id}", "${aws_security_group.openvpn.id}", "${aws_security_group.ops_monitoring.id}"]
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
