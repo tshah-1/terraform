@@ -3,6 +3,14 @@ resource "aws_security_group" "sportal_web" {
   description = "Sportal Web Server access SG"
   vpc_id      = "${aws_vpc.main.id}"
 
+  # allow ICMP
+  ingress {
+    security_groups = ["${aws_security_group.ops_monitoring.id}", "${aws_security_group.openvpn.id}"]
+    from_port = -1
+    to_port = -1
+    protocol = "icmp"
+  }
+
   # allow traffic to SNMP port
   ingress {
     security_groups = ["${aws_security_group.ops_monitoring.id}"]
@@ -10,7 +18,6 @@ resource "aws_security_group" "sportal_web" {
     to_port     = 161
     protocol    = "udp"
   }
-
 
   ingress {
     from_port   = 22
@@ -182,6 +189,14 @@ resource "aws_security_group" "sportal_cms" {
   name        = "sportal_cms"
   description = "Sportal CMS Server access SG"
   vpc_id      = "${aws_vpc.main.id}"
+
+  # allow ICMP
+  ingress {
+    security_groups = ["${aws_security_group.ops_monitoring.id}", "${aws_security_group.openvpn.id}"]
+    from_port = -1
+    to_port = -1
+    protocol = "icmp"
+  }
 
   # allow traffic to SNMP port
   ingress {
@@ -405,6 +420,22 @@ resource "aws_security_group" "ops_monitoring" {
     to_port         = 22
     protocol        = "tcp"
     self            = true
+  }
+
+  # allow ICMP
+  ingress {
+    from_port = -1
+    to_port = -1
+    protocol = "icmp"
+    cidr_blocks = ["109.73.148.70/32"]
+  }
+
+  # allow traffic to SNMP port
+  ingress {
+    from_port   = 161
+    to_port     = 161
+    protocol    = "udp"
+    cidr_blocks = ["109.73.148.70/32"]
   }
 
   ingress {
