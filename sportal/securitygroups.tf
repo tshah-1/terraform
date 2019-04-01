@@ -116,7 +116,7 @@ resource "aws_security_group" "Ansible_SSH_Access" {
 
   # allow ICMP
   ingress {
-    security_groups = ["${aws_security_group.ops_monitoring.id}", "${aws_security_group.openvpn.id}"]
+    security_groups = ["${aws_security_group.ops_monitoring.id}"]
     from_port = -1
     to_port = -1
     protocol = "icmp"
@@ -158,7 +158,7 @@ resource "aws_security_group" "openvpn" {
 
   # allow ICMP
   ingress {
-    security_groups = ["${aws_security_group.ops_monitoring.id}", "${aws_security_group.openvpn.id}"]
+    security_groups = ["${aws_security_group.ops_monitoring.id}"]
     from_port = -1
     to_port = -1
     protocol = "icmp"
