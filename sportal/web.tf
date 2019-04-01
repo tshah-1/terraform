@@ -438,3 +438,7 @@ resource "aws_elb" "t-online-sportal-de" {
       ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/c1b5aeed-f249-4ea3-8a45-3cd2e8245a3f"
     }
 }
+
+resource "aws_eip" "web_host_ip" {
+  instance = "${aws_instance.csportal-web-azc.1.id}"
+}
