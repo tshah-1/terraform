@@ -30,7 +30,7 @@ variable "images" {
     "ap-southeast-1" = "ami-8e0205f2"
     "ap-northeast-1" = "ami-8e8847f1"
     "ca-central-1"   = "ami-e802818c"
-    "eu-central-1"   = "ami-0963f4d997fb2de41"
+    "eu-central-1"   = "ami-01ee12e4b6932495c"
     "eu-west-2"      = "ami-0eab3a90fc693af19"
     "sa-east-1"      = "ami-cb5803a7"
   }
