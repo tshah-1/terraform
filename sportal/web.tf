@@ -7,7 +7,7 @@ variable "num_instances_web_azb" {
 }
 
 variable "num_instances_web_azc" {
-  default = 2
+  default = 3
 }
 
 resource "aws_instance" "csportal-web-aza" {
