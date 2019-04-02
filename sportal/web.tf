@@ -7,7 +7,7 @@ variable "num_instances_web_azb" {
 }
 
 variable "num_instances_web_azc" {
-  default = 3
+  default = 2
 }
 
 resource "aws_instance" "csportal-web-aza" {
@@ -63,7 +63,7 @@ resource "aws_route53_record" "csportal-web-azb" {
 }
 
 resource "aws_instance" "csportal-web-azc" {
-  ami                    = "ami-01ee12e4b6932495c"
+  ami                    = "${var.images["${terraform.workspace}"]}"
   key_name               = "${var.keys["${terraform.workspace}"]}"
   instance_type          = "m5.4xlarge"
   vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
