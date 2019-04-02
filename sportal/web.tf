@@ -13,7 +13,7 @@ variable "num_instances_web_azc" {
 resource "aws_instance" "csportal-web-aza" {
   ami                    = "${var.images["${terraform.workspace}"]}"
   key_name               = "${var.keys["${terraform.workspace}"]}"
-  instance_type          = "t3.xlarge"
+  instance_type          = "m5.4xlarge"
   vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
   subnet_id              = "${aws_subnet.webfe_subnet_a.id}"
   count                  = "${var.num_instances_web_aza}"
@@ -39,7 +39,7 @@ resource "aws_route53_record" "csportal-web-aza" {
 resource "aws_instance" "csportal-web-azb" {
   ami                    = "${var.images["${terraform.workspace}"]}"
   key_name               = "${var.keys["${terraform.workspace}"]}"
-  instance_type          = "t3.xlarge"
+  instance_type          = "m5.4xlarge"
   vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
   subnet_id              = "${aws_subnet.webfe_subnet_b.id}"
   count                  = "${var.num_instances_web_azb}"
@@ -65,7 +65,7 @@ resource "aws_route53_record" "csportal-web-azb" {
 resource "aws_instance" "csportal-web-azc" {
   ami                    = "${var.images["${terraform.workspace}"]}"
   key_name               = "${var.keys["${terraform.workspace}"]}"
-  instance_type          = "t3.xlarge"
+  instance_type          = "m5.4xlarge"
   vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
   subnet_id              = "${aws_subnet.webfe_subnet_c.id}"
   count                  = "${var.num_instances_web_azc}"
