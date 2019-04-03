@@ -23,7 +23,7 @@ resource "aws_security_group" "sportal_web" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${aws_eip.ansible_host_ip.public_ip}/32", "82.25.7.144/32", "62.253.83.190/32", "109.73.148.70/32"]
+    cidr_blocks = ["${aws_eip.ansible_host_ip.private_ip}/32", "82.25.7.144/32", "62.253.83.190/32", "109.73.148.70/32"]
   }
 
   ingress {
@@ -449,14 +449,14 @@ resource "aws_security_group" "ops_monitoring" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["109.73.148.70/32"]
+    cidr_blocks = ["109.73.148.70/32", "172.27.224.0/20"]
   }
 
   ingress {
     from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
-    cidr_blocks = ["109.73.148.70/32"]
+    cidr_blocks = ["${aws_eip.ansible_host_ip.public_ip}/32", "109.73.148.70/32", "172.27.224.0/20"]
   }
 
   egress {
