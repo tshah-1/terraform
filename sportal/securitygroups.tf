@@ -240,6 +240,7 @@ resource "aws_security_group" "sportal_cms" {
     to_port         = 80
     protocol        = "tcp"
     self            = true
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
