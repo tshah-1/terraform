@@ -142,18 +142,18 @@ resource "aws_security_group" "openvpn" {
 
   # allow ICMP
   ingress {
-    security_groups = ["${aws_security_group.ops_monitoring.id}"]
     from_port = -1
     to_port = -1
     protocol = "icmp"
+    cidr_blocks = ["${aws_eip.openvpn_eip.public_ip}/32", "109.73.148.70/32"]
   }
 
   # allow traffic to SNMP port
   ingress {
-    security_groups = ["${aws_security_group.ops_monitoring.id}"]
     from_port   = 161
     to_port     = 161
     protocol    = "udp"
+    cidr_blocks = ["${aws_eip.openvpn_eip.public_ip}/32", "109.73.148.70/32"]
   }
 
   # allow traffic to SSH port
