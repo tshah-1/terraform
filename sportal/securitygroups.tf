@@ -7,11 +7,11 @@ resource "aws_security_group" "sportal_web" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${aws_eip.openvpn_eip.public_ip}/32", "${aws_eip.ansible_host_ip.private_ip}/32", "82.25.7.144/32", "62.253.83.190/32", "109.73.148.70/32"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32", "${aws_eip.openvpn_eip.public_ip}/32", "${aws_eip.ansible_host_ip.private_ip}/32", "82.25.7.144/32", "62.253.83.190/32", "109.73.148.70/32"]
   }
 
   ingress {
-    security_groups = ["${aws_security_group.Ansible_SSH_Access.id}", "${aws_security_group.ops_monitoring.id}"]
+    security_groups = ["${aws_security_group.Ansible_SSH_Access.id}"]
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
@@ -103,7 +103,7 @@ resource "aws_security_group" "Ansible_SSH_Access" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${aws_eip.openvpn_eip.public_ip}/32", "62.253.83.190/32", "82.11.218.115/32", "82.25.7.144/32", "82.27.144.252/32", "109.73.148.70/32", "185.42.236.254/32", "194.97.8.70/32", "194.97.8.69/32"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32", "${aws_eip.ansible_host_ip.private_ip}/32", "${aws_eip.openvpn_eip.public_ip}/32", "62.253.83.190/32", "82.11.218.115/32", "82.25.7.144/32", "82.27.144.252/32", "109.73.148.70/32", "185.42.236.254/32", "194.97.8.70/32", "194.97.8.69/32"]
   }
 
   egress {
@@ -129,7 +129,7 @@ resource "aws_security_group" "openvpn" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${aws_eip.openvpn_eip.public_ip}/32", "62.253.83.190/32", "82.11.218.115/32", "82.25.7.144/32", "82.27.144.252/32", "176.26.193.114/32", "109.73.148.70/32"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32", "${aws_eip.openvpn_eip.public_ip}/32", "62.253.83.190/32", "82.11.218.115/32", "82.25.7.144/32", "82.27.144.252/32", "176.26.193.114/32", "109.73.148.70/32"]
   }
 
   # allow traffic to HTTPS port
@@ -199,7 +199,7 @@ resource "aws_security_group" "sportal_cms" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${aws_eip.openvpn_eip.public_ip}/32", "${aws_eip.ansible_host_ip.public_ip}/32", "82.25.7.144/32", "62.253.83.190/32", "109.73.148.70/32"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32", "${aws_eip.openvpn_eip.public_ip}/32", "${aws_eip.ansible_host_ip.public_ip}/32", "82.25.7.144/32", "62.253.83.190/32", "109.73.148.70/32"]
   }
 
   ingress {
@@ -220,7 +220,7 @@ resource "aws_security_group" "sportal_cms" {
   }
 
   ingress {
-    security_groups = ["${aws_security_group.Ansible_SSH_Access.id}", "${aws_security_group.openvpn.id}", "${aws_security_group.ops_monitoring.id}"]
+    security_groups = ["${aws_security_group.Ansible_SSH_Access.id}"]
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
@@ -395,7 +395,7 @@ resource "aws_security_group" "ops_monitoring" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${aws_eip.openvpn_eip.public_ip}/32", "82.25.7.144/32", "62.253.83.190/32", "109.73.148.70/32"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32", "${aws_eip.ansible_host_ip.private_ip}/32", "${aws_eip.openvpn_eip.public_ip}/32", "82.25.7.144/32", "62.253.83.190/32", "109.73.148.70/32"]
   }
 
   ingress {
@@ -409,7 +409,7 @@ resource "aws_security_group" "ops_monitoring" {
     from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
-    cidr_blocks = ["${aws_eip.ansible_host_ip.public_ip}/32", "${aws_eip.openvpn_eip.public_ip}/32", "109.73.148.70/32", "62.253.83.190/32", "172.27.224.0/20"]
+    cidr_blocks = ["${aws_eip.openvpn_eip.public_ip}/32", "109.73.148.70/32", "62.253.83.190/32", "172.27.224.0/20"]
   }
 
   egress {
@@ -430,12 +430,19 @@ resource "aws_security_group" "ops_monitoring_snmp_icmp" {
   description = "Sportal access for monitoring checks SG"
   vpc_id      = "${aws_vpc.main.id}"
 
-    # allow ICMP
+  # allow ICMP
   ingress {
     from_port = -1
     to_port = -1
     protocol = "icmp"
-    cidr_blocks = ["${aws_eip.ansible_host_ip.private_ip}/32", "109.73.148.70/32"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32", "109.73.148.70/32"]
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32"]
   }
 
   # allow traffic to SNMP port
@@ -443,7 +450,7 @@ resource "aws_security_group" "ops_monitoring_snmp_icmp" {
     from_port   = 161
     to_port     = 161
     protocol    = "udp"
-    cidr_blocks = ["${aws_eip.ansible_host_ip.private_ip}/32", "109.73.148.70/32"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32", "109.73.148.70/32"]
   }
 
   tags {
