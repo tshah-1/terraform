@@ -17,7 +17,7 @@ resource "aws_instance" "Sportal_Ansible_Host" {
   ami                    = "${var.images["${terraform.workspace}"]}"
   key_name               = "${var.keys["${terraform.workspace}"]}"
   instance_type          = "t2.micro"
-  vpc_security_group_ids = ["${aws_security_group.Ansible_SSH_Access.id}", "${aws_security_group.ops_monitoring_snmp_icmp.id}"]
+  vpc_security_group_ids = ["${aws_security_group.Ansible_SSH_Access.id}"]
   subnet_id              = "${aws_subnet.public_subnet_a.id}"
 
   user_data = <<-EOF

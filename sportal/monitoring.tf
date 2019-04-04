@@ -3,7 +3,7 @@ resource "aws_instance" "ops_monitoring" {
   ami                             = "ami-0a5f61c2d8cfc4bad"
   key_name                        = "${var.keys["${terraform.workspace}"]}"
   instance_type                   = "t2.xlarge"
-  vpc_security_group_ids          = ["${aws_security_group.ops_monitoring.id}", "${aws_security_group.ops_monitoring_snmp_icmp.id}"]
+  vpc_security_group_ids          = ["${aws_security_group.ops_monitoring.id}"]
   subnet_id                       = "${aws_subnet.public_subnet_a.id}"
   count                           = "${var.num_instances_cms}"
 
