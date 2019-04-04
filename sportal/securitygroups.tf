@@ -5,7 +5,7 @@ resource "aws_security_group" "sportal_web" {
 
   # allow ICMP
   ingress {
-    security_groups = ["${aws_security_group.ops_monitoring.id}", "${aws_security_group.openvpn.id}"]
+    security_groups = ["${aws_security_group.ops_monitoring.id}"]
     from_port = -1
     to_port = -1
     protocol = "icmp"
@@ -140,6 +140,22 @@ resource "aws_security_group" "openvpn" {
   description = "openvpn access SG"
   vpc_id      = "${aws_vpc.main.id}"
 
+  # allow ICMP
+  ingress {
+    security_groups = ["${aws_security_group.ops_monitoring.id}"]
+    from_port = -1
+    to_port = -1
+    protocol = "icmp"
+  }
+
+  # allow traffic to SNMP port
+  ingress {
+    security_groups = ["${aws_security_group.ops_monitoring.id}"]
+    from_port   = 161
+    to_port     = 161
+    protocol    = "udp"
+  }
+
   # allow traffic to SSH port
   ingress {
     from_port   = 22
@@ -192,7 +208,7 @@ resource "aws_security_group" "sportal_cms" {
 
   # allow ICMP
   ingress {
-    security_groups = ["${aws_security_group.ops_monitoring.id}", "${aws_security_group.openvpn.id}"]
+    security_groups = ["${aws_security_group.ops_monitoring.id}"]
     from_port = -1
     to_port = -1
     protocol = "icmp"
@@ -416,7 +432,7 @@ resource "aws_security_group" "ops_monitoring" {
   vpc_id      = "${aws_vpc.main.id}"
 
   ingress {
-    security_groups = ["${aws_security_group.Ansible_SSH_Access.id}", "${aws_security_group.openvpn.id}"]
+    security_groups = ["${aws_security_group.Ansible_SSH_Access.id}"]
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
@@ -428,7 +444,7 @@ resource "aws_security_group" "ops_monitoring" {
     from_port = -1
     to_port = -1
     protocol = "icmp"
-    cidr_blocks = ["109.73.148.70/32"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32", "109.73.148.70/32"]
   }
 
   # allow traffic to SNMP port
@@ -436,7 +452,7 @@ resource "aws_security_group" "ops_monitoring" {
     from_port   = 161
     to_port     = 161
     protocol    = "udp"
-    cidr_blocks = ["109.73.148.70/32"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32", "109.73.148.70/32"]
   }
 
   ingress {
@@ -457,7 +473,7 @@ resource "aws_security_group" "ops_monitoring" {
     from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
-    cidr_blocks = ["${aws_eip.ansible_host_ip.public_ip}/32", "${aws_eip.openvpn_eip.public_ip}/32", "109.73.148.70/32", "62.253.83.190/32", "172.27.224.0/20"]
+    cidr_blocks = ["${aws_eip.ops_monitoring_ip.public_ip}/32", "${aws_eip.openvpn_eip.public_ip}/32", "109.73.148.70/32", "62.253.83.190/32", "172.27.224.0/20"]
   }
 
   egress {
