@@ -14,7 +14,7 @@ resource "aws_instance" "csportal-web-aza" {
   ami                    = "${var.images["${terraform.workspace}"]}"
   key_name               = "${var.keys["${terraform.workspace}"]}"
   instance_type          = "m5.4xlarge"
-  vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
+  vpc_security_group_ids = ["${aws_security_group.sportal_web.id}", "${aws_security_group.ops_monitoring_snmp_icmp}"]
   subnet_id              = "${aws_subnet.webfe_subnet_a.id}"
   count                  = "${var.num_instances_web_aza}"
   associate_public_ip_address = "true"
@@ -40,7 +40,7 @@ resource "aws_instance" "csportal-web-azb" {
   ami                    = "${var.images["${terraform.workspace}"]}"
   key_name               = "${var.keys["${terraform.workspace}"]}"
   instance_type          = "m5.4xlarge"
-  vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
+  vpc_security_group_ids = ["${aws_security_group.sportal_web.id}", "${aws_security_group.ops_monitoring_snmp_icmp}"]
   subnet_id              = "${aws_subnet.webfe_subnet_b.id}"
   count                  = "${var.num_instances_web_azb}"
   associate_public_ip_address = "true"
@@ -66,7 +66,7 @@ resource "aws_instance" "csportal-web-azc" {
   ami                    = "${var.images["${terraform.workspace}"]}"
   key_name               = "${var.keys["${terraform.workspace}"]}"
   instance_type          = "m5.4xlarge"
-  vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
+  vpc_security_group_ids = ["${aws_security_group.sportal_web.id}", "${aws_security_group.ops_monitoring_snmp_icmp}"]
   subnet_id              = "${aws_subnet.webfe_subnet_c.id}"
   count                  = "${var.num_instances_web_azc}"
   associate_public_ip_address = "true"
