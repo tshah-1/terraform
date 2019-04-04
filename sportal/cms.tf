@@ -15,7 +15,7 @@ resource "aws_instance" "csportal-cms-aza" {
   ami                    = "${var.images["${terraform.workspace}"]}"
   key_name               = "${var.keys["${terraform.workspace}"]}"
   instance_type          = "m5.4xlarge"
-  vpc_security_group_ids = ["${aws_security_group.sportal_cms.id}", "${aws_security_group.ops_monitoring_snmp_icmp}"]
+  vpc_security_group_ids = ["${aws_security_group.sportal_cms.id}", "${aws_security_group.ops_monitoring_snmp_icmp.id}"]
   subnet_id              = "${aws_subnet.cms_subnet_a.id}"
   count                  = "${var.num_instances_cms}"
 
@@ -40,7 +40,7 @@ resource "aws_instance" "csportal-cms-azb" {
   ami                    = "${var.images["${terraform.workspace}"]}"
   key_name               = "${var.keys["${terraform.workspace}"]}"
   instance_type          = "m5.4xlarge"
-  vpc_security_group_ids = ["${aws_security_group.sportal_cms.id}", "${aws_security_group.ops_monitoring_snmp_icmp}"]
+  vpc_security_group_ids = ["${aws_security_group.sportal_cms.id}", "${aws_security_group.ops_monitoring_snmp_icmp.id}"]
   subnet_id              = "${aws_subnet.cms_subnet_b.id}"
   count                  = "${var.num_instances_cms}"
 
@@ -63,7 +63,7 @@ resource "aws_route53_record" "csportal-cms-b" {
 
 resource "aws_elb" "sportal_cms_elb" {
   name            = "sportal-cms-elb"
-  security_groups = ["${aws_security_group.sportal_cms_elb.id}", "${aws_security_group.ops_monitoring_snmp_icmp}"]
+  security_groups = ["${aws_security_group.sportal_cms_elb.id}", "${aws_security_group.ops_monitoring_snmp_icmp.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
   subnets   = ["${aws_subnet.cms_subnet_a.id}", "${aws_subnet.cms_subnet_b.id}"]
