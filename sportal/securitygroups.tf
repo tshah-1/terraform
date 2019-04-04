@@ -438,13 +438,6 @@ resource "aws_security_group" "ops_monitoring_snmp_icmp" {
     cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32", "109.73.148.70/32"]
   }
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32"]
-  }
-
   # allow traffic to SNMP port
   ingress {
     from_port   = 161
