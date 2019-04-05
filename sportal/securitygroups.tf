@@ -342,6 +342,22 @@ resource "aws_security_group" "sportal_web_elb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    security_groups = ["${aws_security_group.sportal_web_elb.id}", "${aws_security_group.openvpn.id}"]
+    from_port       = 80
+    to_port         = 90
+    protocol        = "tcp"
+    self            = true
+  }
+
+  ingress {
+    security_groups = ["${aws_security_group.sportal_web_elb.id}", "${aws_security_group.openvpn.id}"]
+    from_port       = 443
+    to_port         = 453
+    protocol        = "tcp"
+    self            = true
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
