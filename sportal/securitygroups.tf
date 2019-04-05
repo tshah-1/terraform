@@ -347,7 +347,6 @@ resource "aws_security_group" "sportal_web_elb" {
     from_port       = 80
     to_port         = 90
     protocol        = "tcp"
-    self            = true
   }
 
   ingress {
@@ -355,7 +354,6 @@ resource "aws_security_group" "sportal_web_elb" {
     from_port       = 443
     to_port         = 453
     protocol        = "tcp"
-    self            = true
   }
 
   egress {
