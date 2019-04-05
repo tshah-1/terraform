@@ -28,6 +28,11 @@ resource "aws_iam_user" "volkerhutten" {
   path = "/"
 }
 
+resource "aws_iam_user" "christianmarko" {
+  name = "christian.marko"
+  path = "/"
+}
+
 resource "aws_iam_group" "admin-users" {
   name = "admin-users"
   path = "/"
