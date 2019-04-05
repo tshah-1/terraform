@@ -99,7 +99,7 @@ resource "aws_elb" "sportal_web_elb" {
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout             = 3
+    timeout             = 12
     interval            = 30
     target              = "HTTP:80/"
   }
@@ -130,7 +130,7 @@ resource "aws_elb" "wintersport-kleinezeitung-at" {
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout             = 3
+    timeout             = 12
     interval            = 30
     target              = "HTTP:81/"
   }
@@ -162,7 +162,7 @@ resource "aws_elb" "liveticker-sueddeutsche-de" {
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout             = 3
+    timeout             = 12
     interval            = 30
     target              = "TCP:82"
   }
@@ -194,7 +194,7 @@ resource "aws_elb" "sportdaten-welt-de" {
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout             = 3
+    timeout             = 12
     interval            = 30
     target              = "TCP:84"
   }
@@ -226,7 +226,7 @@ resource "aws_elb" "sportergebnisse-sueddeutsche" {
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout             = 3
+    timeout             = 12
     interval            = 30
     target              = "TCP:83"
   }
@@ -258,7 +258,7 @@ resource "aws_elb" "welt-sportal-de" {
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout             = 3
+    timeout             = 12
     interval            = 30
     target              = "TCP:90"
   }
@@ -290,7 +290,7 @@ resource "aws_elb" "liveticker-stern-de" {
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout             = 3
+    timeout             = 12
     interval            = 30
     target              = "TCP:85"
   }
@@ -322,7 +322,7 @@ resource "aws_elb" "opta-sky-de" {
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout             = 3
+    timeout             = 12
     interval            = 30
     target              = "TCP:86"
   }
@@ -354,7 +354,7 @@ resource "aws_elb" "20min-sportal-de" {
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout             = 3
+    timeout             = 12
     interval            = 30
     target              = "TCP:87"
   }
@@ -386,7 +386,7 @@ resource "aws_elb" "kurier-sportal-de" {
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout             = 3
+    timeout             = 12
     interval            = 30
     target              = "TCP:88"
   }
@@ -418,7 +418,7 @@ resource "aws_elb" "t-online-sportal-de" {
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout             = 3
+    timeout             = 12
     interval            = 30
     target              = "TCP:89"
   }
