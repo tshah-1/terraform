@@ -63,7 +63,7 @@ resource "aws_route53_record" "csportal-web-azb" {
 }
 
 resource "aws_instance" "csportal-web-azc" {
-  ami                    = "ami-007d58fd6159d9203"
+  ami                    = "ami-0bd268590d727a0e9"
   key_name               = "${var.keys["${terraform.workspace}"]}"
   instance_type          = "m5.4xlarge"
   vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
