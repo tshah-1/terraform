@@ -11,7 +11,7 @@ variable "num_instances_web_azc" {
 }
 
 resource "aws_instance" "csportal-web-aza" {
-  ami                    = "${var.images["${terraform.workspace}"]}"
+  ami                    = "ami-0bd268590d727a0e9"
   key_name               = "${var.keys["${terraform.workspace}"]}"
   instance_type          = "m5.4xlarge"
   vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
@@ -37,7 +37,7 @@ resource "aws_route53_record" "csportal-web-aza" {
 }
 
 resource "aws_instance" "csportal-web-azb" {
-  ami                    = "${var.images["${terraform.workspace}"]}"
+  ami                    = "ami-0bd268590d727a0e9"
   key_name               = "${var.keys["${terraform.workspace}"]}"
   instance_type          = "m5.4xlarge"
   vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
