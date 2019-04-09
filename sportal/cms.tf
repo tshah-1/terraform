@@ -14,7 +14,7 @@ data "aws_subnet_ids" "cms" {
 resource "aws_instance" "csportal-cms-aza" {
   ami                    = "${var.images["${terraform.workspace}"]}"
   key_name               = "${var.keys["${terraform.workspace}"]}"
-  instance_type          = "m5.4xlarge"
+  instance_type          = "t2.medium"
   vpc_security_group_ids = ["${aws_security_group.sportal_cms.id}"]
   subnet_id              = "${aws_subnet.cms_subnet_a.id}"
   count                  = "${var.num_instances_cms}"
@@ -39,7 +39,7 @@ resource "aws_route53_record" "csportal-cms-a" {
 resource "aws_instance" "csportal-cms-azb" {
   ami                    = "${var.images["${terraform.workspace}"]}"
   key_name               = "${var.keys["${terraform.workspace}"]}"
-  instance_type          = "m5.4xlarge"
+  instance_type          = "t2.medium"
   vpc_security_group_ids = ["${aws_security_group.sportal_cms.id}"]
   subnet_id              = "${aws_subnet.cms_subnet_b.id}"
   count                  = "${var.num_instances_cms}"
