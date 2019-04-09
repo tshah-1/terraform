@@ -65,7 +65,7 @@ resource "aws_route53_record" "csportal-web-azb" {
 resource "aws_instance" "csportal-web-azc" {
   ami                         = "ami-0bd268590d727a0e9"
   key_name                    = "${var.keys["${terraform.workspace}"]}"
-  instance_type               = "t2.medium"
+  instance_type               = "t3.medium"
   vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
   subnet_id                   = "${aws_subnet.webfe_subnet_c.id}"
   count                       = "${var.num_instances_web_azc}"
