@@ -6,17 +6,17 @@ resource "aws_security_group" "sportal_web" {
   # allow ICMP
   ingress {
     security_groups = ["${aws_security_group.ops_monitoring.id}"]
-    from_port = -1
-    to_port = -1
-    protocol = "icmp"
+    from_port       = -1
+    to_port         = -1
+    protocol        = "icmp"
   }
 
   # allow traffic to SNMP port
   ingress {
     security_groups = ["${aws_security_group.ops_monitoring.id}"]
-    from_port   = 161
-    to_port     = 161
-    protocol    = "udp"
+    from_port       = 161
+    to_port         = 161
+    protocol        = "udp"
   }
 
   ingress {
@@ -35,10 +35,10 @@ resource "aws_security_group" "sportal_web" {
   }
 
   ingress {
-    from_port       = 80
-    to_port         = 80
-    protocol        = "tcp"
-    self            = true
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    self        = true
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -143,18 +143,20 @@ resource "aws_security_group" "openvpn" {
   # allow ICMP
   ingress {
     from_port = -1
-    to_port = -1
-    protocol = "icmp"
-#    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32", "109.73.148.70/32"]
+    to_port   = -1
+    protocol  = "icmp"
+
+    #    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32", "109.73.148.70/32"]
     cidr_blocks = ["109.73.148.70/32"]
   }
 
   # allow traffic to SNMP port
   ingress {
-    from_port   = 161
-    to_port     = 161
-    protocol    = "udp"
-#    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32", "109.73.148.70/32"]
+    from_port = 161
+    to_port   = 161
+    protocol  = "udp"
+
+    #    cidr_blocks = ["${aws_eip.ops_monitoring_ip.private_ip}/32", "109.73.148.70/32"]
     cidr_blocks = ["109.73.148.70/32"]
   }
 
@@ -211,17 +213,17 @@ resource "aws_security_group" "sportal_cms" {
   # allow ICMP
   ingress {
     security_groups = ["${aws_security_group.ops_monitoring.id}"]
-    from_port = -1
-    to_port = -1
-    protocol = "icmp"
+    from_port       = -1
+    to_port         = -1
+    protocol        = "icmp"
   }
 
   # allow traffic to SNMP port
   ingress {
     security_groups = ["${aws_security_group.ops_monitoring.id}"]
-    from_port   = 161
-    to_port     = 161
-    protocol    = "udp"
+    from_port       = 161
+    to_port         = 161
+    protocol        = "udp"
   }
 
   ingress {
@@ -258,7 +260,7 @@ resource "aws_security_group" "sportal_cms" {
     to_port         = 80
     protocol        = "tcp"
     self            = true
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks     = ["0.0.0.0/0"]
   }
 
   ingress {
@@ -342,19 +344,19 @@ resource "aws_security_group" "sportal_web_elb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-#  ingress {
-#    security_groups = ["${aws_security_group.sportal_web.id}", "${aws_security_group.openvpn.id}"]
-#    from_port       = 80
-#    to_port         = 90
-#    protocol        = "tcp"
-#  }
-#
-#  ingress {
-#    security_groups = ["${aws_security_group.sportal_web.id}", "${aws_security_group.openvpn.id}"]
-#    from_port       = 443
-#    to_port         = 453
-#    protocol        = "tcp"
-#  }
+  #  ingress {
+  #    security_groups = ["${aws_security_group.sportal_web.id}", "${aws_security_group.openvpn.id}"]
+  #    from_port       = 80
+  #    to_port         = 90
+  #    protocol        = "tcp"
+  #  }
+  #
+  #  ingress {
+  #    security_groups = ["${aws_security_group.sportal_web.id}", "${aws_security_group.openvpn.id}"]
+  #    from_port       = 443
+  #    to_port         = 453
+  #    protocol        = "tcp"
+  #  }
 
   egress {
     from_port   = 0
@@ -362,7 +364,6 @@ resource "aws_security_group" "sportal_web_elb" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
   tags {
     Name        = "Sportal Web ELB SG"
     Application = "sportal"
@@ -457,9 +458,9 @@ resource "aws_security_group" "ops_monitoring" {
 
   # allow ICMP
   ingress {
-    from_port = -1
-    to_port = -1
-    protocol = "icmp"
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
     cidr_blocks = ["109.73.148.70/32"]
   }
 

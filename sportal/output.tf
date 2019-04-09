@@ -27,5 +27,5 @@ output "efs_cms_dns" {
 }
 
 output "db_cluster_address" {
-    value = "${aws_rds_cluster.sportal-cluster.endpoint}"
+  value = "${aws_rds_cluster.sportal-cluster.endpoint}"
 }

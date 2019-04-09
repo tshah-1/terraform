@@ -37,7 +37,7 @@ variable "images" {
 }
 
 variable "environment_name" {
-    description = "The name of the environment"
+  description = "The name of the environment"
 }
 
 variable "rds_master_username" {

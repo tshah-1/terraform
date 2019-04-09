@@ -3,10 +3,12 @@ locals {
 }
 
 resource "aws_route53_zone" "sportal" {
-  name    = "${var.zonename}"
+  name = "${var.zonename}"
+
   vpc {
-    vpc_id  = "${aws_vpc.main.id}"
+    vpc_id = "${aws_vpc.main.id}"
   }
+
   comment = "${local.description}"
 
   tags = {

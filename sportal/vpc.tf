@@ -30,7 +30,7 @@ resource "aws_subnet" "webelbfe_subnet_a" {
   cidr_block = "172.24.3.0/24"
 
   #  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
-  availability_zone = "${data.aws_availability_zones.available.names[0]}"
+  availability_zone       = "${data.aws_availability_zones.available.names[0]}"
   map_public_ip_on_launch = "true"
 
   tags {
@@ -45,7 +45,7 @@ resource "aws_subnet" "webelbfe_subnet_b" {
   cidr_block = "172.24.4.0/24"
 
   #  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
-  availability_zone = "${data.aws_availability_zones.available.names[1]}"
+  availability_zone       = "${data.aws_availability_zones.available.names[1]}"
   map_public_ip_on_launch = "true"
 
   tags {
@@ -60,7 +60,7 @@ resource "aws_subnet" "webelbfe_subnet_c" {
   cidr_block = "172.24.5.0/24"
 
   #  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
-  availability_zone = "${data.aws_availability_zones.available.names[2]}"
+  availability_zone       = "${data.aws_availability_zones.available.names[2]}"
   map_public_ip_on_launch = "true"
 
   tags {
@@ -75,7 +75,7 @@ resource "aws_subnet" "webfe_subnet_a" {
   cidr_block = "172.24.1.0/28"
 
   #  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
-  availability_zone = "${data.aws_availability_zones.available.names[0]}"
+  availability_zone       = "${data.aws_availability_zones.available.names[0]}"
   map_public_ip_on_launch = "true"
 
   tags {
@@ -90,8 +90,8 @@ resource "aws_subnet" "webfe_subnet_b" {
   cidr_block = "172.24.1.16/28"
 
   #  availability_zone       = "${element(split(",", lookup(var.azs, "${terraform.workspace}")), count.index)}"
-  availability_zone = "${data.aws_availability_zones.available.names[1]}"
-  availability_zone = "${terraform.workspace}b"
+  availability_zone       = "${data.aws_availability_zones.available.names[1]}"
+  availability_zone       = "${terraform.workspace}b"
   map_public_ip_on_launch = "true"
 
   tags {
@@ -102,10 +102,10 @@ resource "aws_subnet" "webfe_subnet_b" {
 }
 
 resource "aws_subnet" "webfe_subnet_c" {
-  vpc_id            = "${aws_vpc.main.id}"
-  cidr_block        = "172.24.1.32/28"
-  availability_zone = "${data.aws_availability_zones.available.names[2]}"
-  availability_zone = "${terraform.workspace}c"
+  vpc_id                  = "${aws_vpc.main.id}"
+  cidr_block              = "172.24.1.32/28"
+  availability_zone       = "${data.aws_availability_zones.available.names[2]}"
+  availability_zone       = "${terraform.workspace}c"
   map_public_ip_on_launch = "true"
 
   tags {
@@ -116,9 +116,9 @@ resource "aws_subnet" "webfe_subnet_c" {
 }
 
 resource "aws_subnet" "cms_subnet_a" {
-  vpc_id            = "${aws_vpc.main.id}"
-  cidr_block        = "172.24.1.48/28"
-  availability_zone = "${data.aws_availability_zones.available.names[0]}"
+  vpc_id                  = "${aws_vpc.main.id}"
+  cidr_block              = "172.24.1.48/28"
+  availability_zone       = "${data.aws_availability_zones.available.names[0]}"
   map_public_ip_on_launch = "true"
 
   tags {
@@ -129,9 +129,9 @@ resource "aws_subnet" "cms_subnet_a" {
 }
 
 resource "aws_subnet" "cms_subnet_b" {
-  vpc_id            = "${aws_vpc.main.id}"
-  cidr_block        = "172.24.1.64/28"
-  availability_zone = "${data.aws_availability_zones.available.names[1]}"
+  vpc_id                  = "${aws_vpc.main.id}"
+  cidr_block              = "172.24.1.64/28"
+  availability_zone       = "${data.aws_availability_zones.available.names[1]}"
   map_public_ip_on_launch = "true"
 
   tags {
@@ -275,32 +275,33 @@ resource "aws_route_table_association" "cms_subnet_b" {
 }
 
 resource "aws_eip" "main-nat" {
-vpc      = true
+  vpc = true
 }
 
 resource "aws_eip" "nat" {
-	vpc			= true
+  vpc = true
 }
 
 resource "aws_nat_gateway" "nat" {
-	allocation_id		= "${aws_eip.nat.id}"
-	subnet_id		= "${aws_subnet.public_subnet_a.id}"
-	tags {
-		Name		= "main VPC NAT"
-	}
+  allocation_id = "${aws_eip.nat.id}"
+  subnet_id     = "${aws_subnet.public_subnet_a.id}"
+
+  tags {
+    Name = "main VPC NAT"
+  }
 }
 
 resource "aws_route_table" "private_routetable" {
-	vpc_id			= "${aws_vpc.main.id}"
+  vpc_id = "${aws_vpc.main.id}"
 
-	route {
-		cidr_block	= "0.0.0.0/0"
-		nat_gateway_id	= "${aws_nat_gateway.nat.id}"
-	}
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = "${aws_nat_gateway.nat.id}"
+  }
 
-	tags {
-		label 		= "Sportal"
-	}
+  tags {
+    label = "Sportal"
+  }
 }
 
 resource "aws_subnet" "db_subnet_a" {

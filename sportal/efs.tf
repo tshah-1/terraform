@@ -1,8 +1,9 @@
 resource "aws_efs_file_system" "sportal-web" {
-  creation_token   = "sportalweb"
-  performance_mode = "generalPurpose"
-  throughput_mode  = "bursting"
-  encrypted        = "true"
+  creation_token                  = "sportalweb"
+  performance_mode                = "generalPurpose"
+  throughput_mode                 = "provisioned"
+  provisioned_throughput_in_mibps = "256"
+  encrypted                       = "true"
 
   tags = {
     Name        = "Sportal_web_EFS"

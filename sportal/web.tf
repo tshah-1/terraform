@@ -11,12 +11,12 @@ variable "num_instances_web_azc" {
 }
 
 resource "aws_instance" "csportal-web-aza" {
-  ami                    = "ami-0bd268590d727a0e9"
-  key_name               = "${var.keys["${terraform.workspace}"]}"
-  instance_type          = "m5.4xlarge"
-  vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
-  subnet_id              = "${aws_subnet.webfe_subnet_a.id}"
-  count                  = "${var.num_instances_web_aza}"
+  ami                         = "ami-0bd268590d727a0e9"
+  key_name                    = "${var.keys["${terraform.workspace}"]}"
+  instance_type               = "t2.medium"
+  vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
+  subnet_id                   = "${aws_subnet.webfe_subnet_a.id}"
+  count                       = "${var.num_instances_web_aza}"
   associate_public_ip_address = "true"
 
   tags {
@@ -37,12 +37,12 @@ resource "aws_route53_record" "csportal-web-aza" {
 }
 
 resource "aws_instance" "csportal-web-azb" {
-  ami                    = "ami-0bd268590d727a0e9"
-  key_name               = "${var.keys["${terraform.workspace}"]}"
-  instance_type          = "m5.4xlarge"
-  vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
-  subnet_id              = "${aws_subnet.webfe_subnet_b.id}"
-  count                  = "${var.num_instances_web_azb}"
+  ami                         = "ami-0bd268590d727a0e9"
+  key_name                    = "${var.keys["${terraform.workspace}"]}"
+  instance_type               = "t2.medium"
+  vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
+  subnet_id                   = "${aws_subnet.webfe_subnet_b.id}"
+  count                       = "${var.num_instances_web_azb}"
   associate_public_ip_address = "true"
 
   tags {
@@ -63,12 +63,12 @@ resource "aws_route53_record" "csportal-web-azb" {
 }
 
 resource "aws_instance" "csportal-web-azc" {
-  ami                    = "ami-0bd268590d727a0e9"
-  key_name               = "${var.keys["${terraform.workspace}"]}"
-  instance_type          = "m5.4xlarge"
-  vpc_security_group_ids = ["${aws_security_group.sportal_web.id}"]
-  subnet_id              = "${aws_subnet.webfe_subnet_c.id}"
-  count                  = "${var.num_instances_web_azc}"
+  ami                         = "ami-0bd268590d727a0e9"
+  key_name                    = "${var.keys["${terraform.workspace}"]}"
+  instance_type               = "t2.medium"
+  vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
+  subnet_id                   = "${aws_subnet.webfe_subnet_c.id}"
+  count                       = "${var.num_instances_web_azc}"
   associate_public_ip_address = "true"
 
   tags {
@@ -142,13 +142,13 @@ resource "aws_elb" "wintersport-kleinezeitung-at" {
     instance_protocol = "http"
   }
 
-    listener {
-      lb_port = 443
-      lb_protocol = "https"
-      instance_port = "444"
-      instance_protocol = "https"
-      ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/9494a276-d29e-413c-9375-043e75ed47d1"
-    }
+  listener {
+    lb_port            = 443
+    lb_protocol        = "https"
+    instance_port      = "444"
+    instance_protocol  = "https"
+    ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/9494a276-d29e-413c-9375-043e75ed47d1"
+  }
 }
 
 resource "aws_elb" "liveticker-sueddeutsche-de" {
@@ -174,13 +174,13 @@ resource "aws_elb" "liveticker-sueddeutsche-de" {
     instance_protocol = "http"
   }
 
-    listener {
-      lb_port = 443
-      lb_protocol = "https"
-      instance_port = "445"
-      instance_protocol = "https"
-      ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/fb8d7199-d1a0-4cdf-8320-53fe5744d4d9"
-    }
+  listener {
+    lb_port            = 443
+    lb_protocol        = "https"
+    instance_port      = "445"
+    instance_protocol  = "https"
+    ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/fb8d7199-d1a0-4cdf-8320-53fe5744d4d9"
+  }
 }
 
 resource "aws_elb" "sportdaten-welt-de" {
@@ -206,13 +206,13 @@ resource "aws_elb" "sportdaten-welt-de" {
     instance_protocol = "http"
   }
 
-    listener {
-      lb_port = 443
-      lb_protocol = "https"
-      instance_port = "447"
-      instance_protocol = "https"
-      ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/02732ca7-7ff2-45fe-8d26-cf84bb8696fa"
-    }
+  listener {
+    lb_port            = 443
+    lb_protocol        = "https"
+    instance_port      = "447"
+    instance_protocol  = "https"
+    ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/02732ca7-7ff2-45fe-8d26-cf84bb8696fa"
+  }
 }
 
 resource "aws_elb" "sportergebnisse-sueddeutsche" {
@@ -238,13 +238,13 @@ resource "aws_elb" "sportergebnisse-sueddeutsche" {
     instance_protocol = "http"
   }
 
-    listener {
-      lb_port = 443
-      lb_protocol = "https"
-      instance_port = "446"
-      instance_protocol = "https"
-      ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/34ad5a5c-b350-4ba6-bee2-a1b42bd3333a"
-    }
+  listener {
+    lb_port            = 443
+    lb_protocol        = "https"
+    instance_port      = "446"
+    instance_protocol  = "https"
+    ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/34ad5a5c-b350-4ba6-bee2-a1b42bd3333a"
+  }
 }
 
 resource "aws_elb" "welt-sportal-de" {
@@ -270,13 +270,13 @@ resource "aws_elb" "welt-sportal-de" {
     instance_protocol = "http"
   }
 
-    listener {
-      lb_port = 443
-      lb_protocol = "https"
-      instance_port = "453"
-      instance_protocol = "https"
-      ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/ca0a50e5-e9c5-4990-a5aa-6ab22f584184"
-    }
+  listener {
+    lb_port            = 443
+    lb_protocol        = "https"
+    instance_port      = "453"
+    instance_protocol  = "https"
+    ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/ca0a50e5-e9c5-4990-a5aa-6ab22f584184"
+  }
 }
 
 resource "aws_elb" "liveticker-stern-de" {
@@ -302,13 +302,13 @@ resource "aws_elb" "liveticker-stern-de" {
     instance_protocol = "http"
   }
 
-    listener {
-      lb_port = 443
-      lb_protocol = "https"
-      instance_port = "448"
-      instance_protocol = "https"
-      ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/d29a35f4-ab63-4c6c-8857-41c0d7565eb6"
-    }
+  listener {
+    lb_port            = 443
+    lb_protocol        = "https"
+    instance_port      = "448"
+    instance_protocol  = "https"
+    ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/d29a35f4-ab63-4c6c-8857-41c0d7565eb6"
+  }
 }
 
 resource "aws_elb" "opta-sky-de" {
@@ -334,13 +334,13 @@ resource "aws_elb" "opta-sky-de" {
     instance_protocol = "http"
   }
 
-    listener {
-      lb_port = 443
-      lb_protocol = "https"
-      instance_port = "449"
-      instance_protocol = "https"
-      ssl_certificate_id = "arn:aws:iam::884237813524:server-certificate/opta.sky.de"
-    }
+  listener {
+    lb_port            = 443
+    lb_protocol        = "https"
+    instance_port      = "449"
+    instance_protocol  = "https"
+    ssl_certificate_id = "arn:aws:iam::884237813524:server-certificate/opta.sky.de"
+  }
 }
 
 resource "aws_elb" "20min-sportal-de" {
@@ -366,13 +366,13 @@ resource "aws_elb" "20min-sportal-de" {
     instance_protocol = "http"
   }
 
-    listener {
-      lb_port = 443
-      lb_protocol = "https"
-      instance_port = "450"
-      instance_protocol = "https"
-      ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/fc6ac4bd-e117-4fb9-b57f-9ef43f43a340"
-    }
+  listener {
+    lb_port            = 443
+    lb_protocol        = "https"
+    instance_port      = "450"
+    instance_protocol  = "https"
+    ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/fc6ac4bd-e117-4fb9-b57f-9ef43f43a340"
+  }
 }
 
 resource "aws_elb" "kurier-sportal-de" {
@@ -398,13 +398,13 @@ resource "aws_elb" "kurier-sportal-de" {
     instance_protocol = "http"
   }
 
-    listener {
-      lb_port = 443
-      lb_protocol = "https"
-      instance_port = "451"
-      instance_protocol = "https"
-      ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/930f3e90-2003-4111-8348-cae11c2cd011"
-    }
+  listener {
+    lb_port            = 443
+    lb_protocol        = "https"
+    instance_port      = "451"
+    instance_protocol  = "https"
+    ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/930f3e90-2003-4111-8348-cae11c2cd011"
+  }
 }
 
 resource "aws_elb" "t-online-sportal-de" {
@@ -430,13 +430,13 @@ resource "aws_elb" "t-online-sportal-de" {
     instance_protocol = "http"
   }
 
-    listener {
-      lb_port = 443
-      lb_protocol = "https"
-      instance_port = "452"
-      instance_protocol = "https"
-      ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/c1b5aeed-f249-4ea3-8a45-3cd2e8245a3f"
-    }
+  listener {
+    lb_port            = 443
+    lb_protocol        = "https"
+    instance_port      = "452"
+    instance_protocol  = "https"
+    ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/c1b5aeed-f249-4ea3-8a45-3cd2e8245a3f"
+  }
 }
 
 resource "aws_eip" "web_host_ip" {

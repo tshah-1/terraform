@@ -77,4 +77,3 @@ resource "aws_iam_group_policy" "explicit-admin" {
 }
 EOF
 }
-
