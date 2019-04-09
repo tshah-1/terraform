@@ -8,7 +8,7 @@ resource "aws_rds_cluster" "sportal-cluster" {
   scaling_configuration {
     auto_pause   = false
     max_capacity = 64
-    min_capacity = 16
+    min_capacity = 2
   }
 
   master_username              = "${var.rds_master_username}"
