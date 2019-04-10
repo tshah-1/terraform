@@ -11,16 +11,15 @@ variable "num_instances_web_azc" {
 }
 
 resource "aws_instance" "csportal-web-aza" {
-  ami                         = "ami-0343dbd311cd3b2fc"
+  ami                         = "ami-044d6ea958a79824d"
   key_name                    = "${var.keys["${terraform.workspace}"]}"
   instance_type               = "t3.medium"
   vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
   subnet_id                   = "${aws_subnet.webfe_subnet_a.id}"
   count                       = "${var.num_instances_web_aza}"
   associate_public_ip_address = "true"
-
   tags {
-    Name = "${format("csportal-web%02d",count.index+1)}"
+    Name = "${format("csportal-web-a%02d",count.index+1)}"
   }
 }
 
@@ -28,7 +27,7 @@ resource "aws_route53_record" "csportal-web-aza" {
   // same number of records as instances
   count   = "${var.num_instances_web_aza}"
   zone_id = "${aws_route53_zone.sportal.zone_id}"
-  name    = "${format("csportal-web%02d",count.index+1)}"
+  name    = "${format("csportal-web-a%02d",count.index+1)}"
   type    = "A"
   ttl     = "300"
 
@@ -37,7 +36,7 @@ resource "aws_route53_record" "csportal-web-aza" {
 }
 
 resource "aws_instance" "csportal-web-azb" {
-  ami                         = "ami-0bd268590d727a0e9"
+  ami                         = "ami-044d6ea958a79824d"
   key_name                    = "${var.keys["${terraform.workspace}"]}"
   instance_type               = "t3.medium"
   vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
@@ -46,7 +45,7 @@ resource "aws_instance" "csportal-web-azb" {
   associate_public_ip_address = "true"
 
   tags {
-    Name = "${format("csportal-web%02d",count.index+4)}"
+    Name = "${format("csportal-web-b%02d",count.index+1)}"
   }
 }
 
@@ -54,7 +53,7 @@ resource "aws_route53_record" "csportal-web-azb" {
   // same number of records as instances
   count   = "${var.num_instances_web_azb}"
   zone_id = "${aws_route53_zone.sportal.zone_id}"
-  name    = "${format("csportal-web%02d",count.index+4)}"
+  name    = "${format("csportal-web-b%02d",count.index+1)}"
   type    = "A"
   ttl     = "300"
 
@@ -63,7 +62,7 @@ resource "aws_route53_record" "csportal-web-azb" {
 }
 
 resource "aws_instance" "csportal-web-azc" {
-  ami                         = "ami-0bd268590d727a0e9"
+  ami                         = "ami-044d6ea958a79824d"
   key_name                    = "${var.keys["${terraform.workspace}"]}"
   instance_type               = "t3.medium"
   vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
@@ -72,7 +71,7 @@ resource "aws_instance" "csportal-web-azc" {
   associate_public_ip_address = "true"
 
   tags {
-    Name = "${format("csportal-web%02d",count.index+7)}"
+    Name = "${format("csportal-web-c%02d",count.index+1)}"
   }
 }
 
@@ -80,7 +79,7 @@ resource "aws_route53_record" "csportal-web-azc" {
   // same number of records as instances
   count   = "${var.num_instances_web_azc}"
   zone_id = "${aws_route53_zone.sportal.zone_id}"
-  name    = "${format("csportal-web%02d",count.index+7)}"
+  name    = "${format("csportal-web-c%02d",count.index+1)}"
   type    = "A"
   ttl     = "300"
 
