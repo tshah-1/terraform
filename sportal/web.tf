@@ -18,6 +18,7 @@ resource "aws_instance" "csportal-web-aza" {
   subnet_id                   = "${aws_subnet.webfe_subnet_a.id}"
   count                       = "${var.num_instances_web_aza}"
   associate_public_ip_address = "true"
+
   tags {
     Name = "${format("csportal-web-a%02d",count.index+1)}"
   }
@@ -110,12 +111,10 @@ resource "aws_elb" "sportal_web_elb" {
     instance_protocol = "http"
   }
 
-  #  listener {
-  #    lb_port = 443
-  #    lb_protocol = "https"
-  #    instance_port = "443"
-  #    instance_protocol = "https"
-  #  }
+  cross_zone_load_balancing   = true
+  idle_timeout                = 400
+  connection_draining         = true
+  connection_draining_timeout = 400
 }
 
 resource "aws_elb" "wintersport-kleinezeitung-at" {
@@ -148,6 +147,11 @@ resource "aws_elb" "wintersport-kleinezeitung-at" {
     instance_protocol  = "https"
     ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/9494a276-d29e-413c-9375-043e75ed47d1"
   }
+
+  cross_zone_load_balancing   = true
+  idle_timeout                = 400
+  connection_draining         = true
+  connection_draining_timeout = 400
 }
 
 resource "aws_elb" "liveticker-sueddeutsche-de" {
@@ -180,6 +184,11 @@ resource "aws_elb" "liveticker-sueddeutsche-de" {
     instance_protocol  = "https"
     ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/fb8d7199-d1a0-4cdf-8320-53fe5744d4d9"
   }
+
+  cross_zone_load_balancing   = true
+  idle_timeout                = 400
+  connection_draining         = true
+  connection_draining_timeout = 400
 }
 
 resource "aws_elb" "sportdaten-welt-de" {
@@ -212,6 +221,11 @@ resource "aws_elb" "sportdaten-welt-de" {
     instance_protocol  = "https"
     ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/02732ca7-7ff2-45fe-8d26-cf84bb8696fa"
   }
+
+  cross_zone_load_balancing   = true
+  idle_timeout                = 400
+  connection_draining         = true
+  connection_draining_timeout = 400
 }
 
 resource "aws_elb" "sportergebnisse-sueddeutsche" {
@@ -244,6 +258,11 @@ resource "aws_elb" "sportergebnisse-sueddeutsche" {
     instance_protocol  = "https"
     ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/34ad5a5c-b350-4ba6-bee2-a1b42bd3333a"
   }
+
+  cross_zone_load_balancing   = true
+  idle_timeout                = 400
+  connection_draining         = true
+  connection_draining_timeout = 400
 }
 
 resource "aws_elb" "welt-sportal-de" {
@@ -276,6 +295,11 @@ resource "aws_elb" "welt-sportal-de" {
     instance_protocol  = "https"
     ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/ca0a50e5-e9c5-4990-a5aa-6ab22f584184"
   }
+
+  cross_zone_load_balancing   = true
+  idle_timeout                = 400
+  connection_draining         = true
+  connection_draining_timeout = 400
 }
 
 resource "aws_elb" "liveticker-stern-de" {
@@ -308,6 +332,11 @@ resource "aws_elb" "liveticker-stern-de" {
     instance_protocol  = "https"
     ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/d29a35f4-ab63-4c6c-8857-41c0d7565eb6"
   }
+
+  cross_zone_load_balancing   = true
+  idle_timeout                = 400
+  connection_draining         = true
+  connection_draining_timeout = 400
 }
 
 resource "aws_elb" "opta-sky-de" {
@@ -340,6 +369,11 @@ resource "aws_elb" "opta-sky-de" {
     instance_protocol  = "https"
     ssl_certificate_id = "arn:aws:iam::884237813524:server-certificate/opta.sky.de"
   }
+
+  cross_zone_load_balancing   = true
+  idle_timeout                = 400
+  connection_draining         = true
+  connection_draining_timeout = 400
 }
 
 resource "aws_elb" "20min-sportal-de" {
@@ -372,6 +406,11 @@ resource "aws_elb" "20min-sportal-de" {
     instance_protocol  = "https"
     ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/fc6ac4bd-e117-4fb9-b57f-9ef43f43a340"
   }
+
+  cross_zone_load_balancing   = true
+  idle_timeout                = 400
+  connection_draining         = true
+  connection_draining_timeout = 400
 }
 
 resource "aws_elb" "kurier-sportal-de" {
@@ -404,6 +443,11 @@ resource "aws_elb" "kurier-sportal-de" {
     instance_protocol  = "https"
     ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/930f3e90-2003-4111-8348-cae11c2cd011"
   }
+
+  cross_zone_load_balancing   = true
+  idle_timeout                = 400
+  connection_draining         = true
+  connection_draining_timeout = 400
 }
 
 resource "aws_elb" "t-online-sportal-de" {
@@ -436,6 +480,11 @@ resource "aws_elb" "t-online-sportal-de" {
     instance_protocol  = "https"
     ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/c1b5aeed-f249-4ea3-8a45-3cd2e8245a3f"
   }
+
+  cross_zone_load_balancing   = true
+  idle_timeout                = 400
+  connection_draining         = true
+  connection_draining_timeout = 400
 }
 
 resource "aws_eip" "web_host_ip" {

@@ -39,10 +39,10 @@ resource "aws_efs_mount_target" "sportal-web-efs-mount-c" {
 }
 
 resource "aws_efs_file_system" "sportal-web2" {
-  creation_token                  = "sportalweb2"
-  performance_mode                = "maxIO"
-  throughput_mode                 = "bursting"
-  encrypted                       = "false"
+  creation_token   = "sportalweb2"
+  performance_mode = "maxIO"
+  throughput_mode  = "bursting"
+  encrypted        = "false"
 
   tags = {
     Name        = "Sportal_web_EFS2"
