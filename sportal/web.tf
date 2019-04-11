@@ -200,20 +200,23 @@ resource "aws_elb" "sportdaten-welt-de" {
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
   subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+#  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+# instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
 
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     timeout             = 12
     interval            = 30
-    target              = "TCP:84"
+ #   target              = "TCP:84"
+    target              = "HTTP:80/"
   }
 
   listener {
     lb_port           = 80
     lb_protocol       = "http"
-    instance_port     = "84"
+    instance_port     = "80"
     instance_protocol = "http"
   }
 
@@ -275,20 +278,23 @@ resource "aws_elb" "welt-sportal-de" {
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
   subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+#  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+#  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
 
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     timeout             = 12
     interval            = 30
-    target              = "TCP:90"
+ #   target              = "TCP:90"
+    target              = "HTTP:80/"
   }
 
   listener {
     lb_port           = 80
     lb_protocol       = "http"
-    instance_port     = "90"
+    instance_port     = "80"
     instance_protocol = "http"
   }
 
