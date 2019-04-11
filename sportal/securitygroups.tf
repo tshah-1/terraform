@@ -43,7 +43,7 @@ resource "aws_security_group" "sportal_web" {
   }
 
   ingress {
-    security_groups = ["${aws_security_group.sportal_web_elb.id}", "${aws_security_group.openvpn.id}"]
+    security_groups = ["${aws_security_group.sportal_web_elb.id}", "${aws_security_group.openvpn.id}", "${aws_security_group.sportal_web_int_elb.id}"]
     from_port       = 80
     to_port         = 90
     protocol        = "tcp"
@@ -51,7 +51,7 @@ resource "aws_security_group" "sportal_web" {
   }
 
   ingress {
-    security_groups = ["${aws_security_group.sportal_web_elb.id}", "${aws_security_group.openvpn.id}"]
+    security_groups = ["${aws_security_group.sportal_web_elb.id}", "${aws_security_group.openvpn.id}", "${aws_security_group.sportal_web_int_elb.id}"]
     from_port       = 443
     to_port         = 453
     protocol        = "tcp"
@@ -502,6 +502,39 @@ resource "aws_security_group" "ops_monitoring" {
 
   tags {
     Name        = "Sportal Monitoring SG"
+    Application = "sportal"
+  }
+}
+
+//
+resource "aws_security_group" "sportal_web_int_elb" {
+  name        = "sportal_web_int_elb"
+  description = "Sportal Web Int ELB access SG"
+  vpc_id      = "${aws_vpc.main.id}"
+
+  # allow traffic to HTTP port
+  ingress {
+    from_port   = 443
+    to_port     = 453
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 90
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags {
+    Name        = "Sportal Web Int ELB SG"
     Application = "sportal"
   }
 }

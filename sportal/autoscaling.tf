@@ -26,7 +26,7 @@ resource "aws_autoscaling_group" "web-autoscaling" {
 
   enabled_metrics     = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupTotalInstances"]
   metrics_granularity = "1Minute"
-  load_balancers      = ["${aws_elb.sportal_web_elb.id}", "${aws_elb.wintersport-kleinezeitung-at.id}", "${aws_elb.liveticker-sueddeutsche-de.id}", "${aws_elb.sportdaten-welt-de.id}", "${aws_elb.sportergebnisse-sueddeutsche.id}", "${aws_elb.welt-sportal-de.id}", "${aws_elb.liveticker-stern-de.id}", "${aws_elb.opta-sky-de.id}", "${aws_elb.20min-sportal-de.id}", "${aws_elb.kurier-sportal-de.id}", "${aws_elb.t-online-sportal-de.id}"]
+  load_balancers      = ["${aws_elb.sportal_web_internal_elb.id}"]
 
   tags = {
     key                 = "Name"
@@ -93,4 +93,31 @@ resource "aws_cloudwatch_metric_alarm" "web-cpu-alarm-scaledown" {
   actions_enabled   = true
   alarm_description = "This metric monitors EC2 instance cpu utilization"
   alarm_actions     = ["${aws_autoscaling_policy.web-cpu-policy-scaledown.arn}"]
+}
+
+resource "aws_elb" "sportal_web_internal_elb" {
+  name            = "sportal-web-int-elb"
+  security_groups = ["${aws_security_group.sportal_web_int_elb.id}"]
+  internal = "true"
+  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 12
+    interval            = 30
+    target              = "HTTP:80/"
+  }
+
+  listener {
+    lb_port           = 80
+    lb_protocol       = "http"
+    instance_port     = "80"
+    instance_protocol = "http"
+  }
+
+  cross_zone_load_balancing   = true
+  idle_timeout                = 400
+  connection_draining         = true
+  connection_draining_timeout = 400
 }

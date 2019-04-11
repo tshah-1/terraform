@@ -1,101 +1,10 @@
-variable "num_instances_web_aza" {
-  default = 3
-}
-
-variable "num_instances_web_azb" {
-  default = 3
-}
-
-variable "num_instances_web_azc" {
-  default = 3
-}
-
-resource "aws_instance" "csportal-web-aza" {
-  ami                         = "ami-044d6ea958a79824d"
-  key_name                    = "${var.keys["${terraform.workspace}"]}"
-  instance_type               = "t3.medium"
-  vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
-  subnet_id                   = "${aws_subnet.webfe_subnet_a.id}"
-  count                       = "${var.num_instances_web_aza}"
-  associate_public_ip_address = "true"
-
-  tags {
-    Name = "${format("csportal-web-a%02d",count.index+1)}"
-  }
-}
-
-resource "aws_route53_record" "csportal-web-aza" {
-  // same number of records as instances
-  count   = "${var.num_instances_web_aza}"
-  zone_id = "${aws_route53_zone.sportal.zone_id}"
-  name    = "${format("csportal-web-a%02d",count.index+1)}"
-  type    = "A"
-  ttl     = "300"
-
-  // matches up record N to instance N
-  records = ["${element(aws_instance.csportal-web-aza.*.private_ip, count.index)}"]
-}
-
-resource "aws_instance" "csportal-web-azb" {
-  ami                         = "ami-044d6ea958a79824d"
-  key_name                    = "${var.keys["${terraform.workspace}"]}"
-  instance_type               = "t3.medium"
-  vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
-  subnet_id                   = "${aws_subnet.webfe_subnet_b.id}"
-  count                       = "${var.num_instances_web_azb}"
-  associate_public_ip_address = "true"
-
-  tags {
-    Name = "${format("csportal-web-b%02d",count.index+1)}"
-  }
-}
-
-resource "aws_route53_record" "csportal-web-azb" {
-  // same number of records as instances
-  count   = "${var.num_instances_web_azb}"
-  zone_id = "${aws_route53_zone.sportal.zone_id}"
-  name    = "${format("csportal-web-b%02d",count.index+1)}"
-  type    = "A"
-  ttl     = "300"
-
-  // matches up record N to instance N
-  records = ["${element(aws_instance.csportal-web-azb.*.private_ip, count.index)}"]
-}
-
-resource "aws_instance" "csportal-web-azc" {
-  ami                         = "ami-044d6ea958a79824d"
-  key_name                    = "${var.keys["${terraform.workspace}"]}"
-  instance_type               = "t3.medium"
-  vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
-  subnet_id                   = "${aws_subnet.webfe_subnet_c.id}"
-  count                       = "${var.num_instances_web_azc}"
-  associate_public_ip_address = "true"
-
-  tags {
-    Name = "${format("csportal-web-c%02d",count.index+1)}"
-  }
-}
-
-resource "aws_route53_record" "csportal-web-azc" {
-  // same number of records as instances
-  count   = "${var.num_instances_web_azc}"
-  zone_id = "${aws_route53_zone.sportal.zone_id}"
-  name    = "${format("csportal-web-c%02d",count.index+1)}"
-  type    = "A"
-  ttl     = "300"
-
-  // matches up record N to instance N
-  records = ["${element(aws_instance.csportal-web-azc.*.private_ip, count.index)}"]
-}
-
-resource "aws_elb" "sportal_web_elb" {
-  name            = "sportal-webelb"
+resource "aws_elb" "temp_sportal_web_elb" {
+  name            = "temp_sportal-webelb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
   subnets   = ["${aws_subnet.webfe_subnet_a.id}", "${aws_subnet.webfe_subnet_b.id}", "${aws_subnet.webfe_subnet_c.id}"]
-  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
-
+  instances = ["${aws_instance.csportal-che-aza.*.id}"]
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
@@ -117,13 +26,13 @@ resource "aws_elb" "sportal_web_elb" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "wintersport-kleinezeitung-at" {
-  name            = "wintersport-kleinezeitung-at-elb"
+resource "aws_elb" "temp_wintersport-kleinezeitung-at" {
+  name            = "temp_wintersport-kleinezeitung-at-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
   subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  instances = ["${aws_instance.csportal-che-aza.*.id}"]
 
   health_check {
     healthy_threshold   = 2
@@ -136,7 +45,7 @@ resource "aws_elb" "wintersport-kleinezeitung-at" {
   listener {
     lb_port           = 80
     lb_protocol       = "http"
-    instance_port     = "81"
+    instance_port     = "444"
     instance_protocol = "http"
   }
 
@@ -154,14 +63,13 @@ resource "aws_elb" "wintersport-kleinezeitung-at" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "liveticker-sueddeutsche-de" {
-  name            = "liveticker-sueddeutsche-de-elb"
+resource "aws_elb" "temp_liveticker-sueddeutsche-de" {
+  name            = "temp_liveticker-sueddeutsche-de-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
   subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
-#  instances = ["${aws_instance.csportal-sweb-aza.*.id}", "${aws_instance.csportal-sweb-azb.*.id}", "${aws_instance.csportal-sweb-azc.*.id}"]
+  instances = ["${aws_instance.csportal-che-aza.*.id}"]
 
   health_check {
     healthy_threshold   = 2
@@ -174,7 +82,7 @@ resource "aws_elb" "liveticker-sueddeutsche-de" {
   listener {
     lb_port           = 80
     lb_protocol       = "http"
-    instance_port     = "82"
+    instance_port     = "445"
     instance_protocol = "http"
   }
 
@@ -192,20 +100,20 @@ resource "aws_elb" "liveticker-sueddeutsche-de" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "sportdaten-welt-de" {
+resource "aws_elb" "temp_sportdaten-welt-de" {
   name            = "sportdaten-welt-de-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
   subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  instances = ["${aws_instance.csportal-che-aza.*.id}"]
 
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     timeout             = 12
     interval            = 30
-    target              = "TCP:84"
+    target              = "TCP:447"
   }
 
   listener {
@@ -229,21 +137,20 @@ resource "aws_elb" "sportdaten-welt-de" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "sportergebnisse-sueddeutsche" {
-  name            = "sportergebnisse-sueddeutsche-elb"
+resource "aws_elb" "temp_sportergebnisse-sueddeutsche" {
+  name            = "temp_sportergebnisse-sueddeutsche-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
   subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
-#  instances = ["${aws_instance.csportal-sweb-aza.*.id}", "${aws_instance.csportal-sweb-azb.*.id}", "${aws_instance.csportal-sweb-azc.*.id}"]
+  instances = ["${aws_instance.csportal-che-aza.*.id}"]
 
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     timeout             = 12
     interval            = 30
-    target              = "TCP:83"
+    target              = "TCP:446"
   }
 
   listener {
@@ -267,20 +174,20 @@ resource "aws_elb" "sportergebnisse-sueddeutsche" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "welt-sportal-de" {
-  name            = "welt-sportal-de-elb"
+resource "aws_elb" "temp_welt-sportal-de" {
+  name            = "temp_welt-sportal-de-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
   subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  instances = ["${aws_instance.csportal-che-aza.*.id}"]
 
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     timeout             = 12
     interval            = 30
-    target              = "TCP:90"
+    target              = "TCP:453"
   }
 
   listener {
@@ -304,20 +211,20 @@ resource "aws_elb" "welt-sportal-de" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "liveticker-stern-de" {
-  name            = "liveticker-stern-de-elb"
+resource "aws_elb" "temp_liveticker-stern-de" {
+  name            = "temp_liveticker-stern-de-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
   subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  instances = ["${aws_instance.csportal-che-aza.*.id}"]
 
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     timeout             = 12
     interval            = 30
-    target              = "TCP:85"
+    target              = "TCP:448"
   }
 
   listener {
@@ -341,20 +248,20 @@ resource "aws_elb" "liveticker-stern-de" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "opta-sky-de" {
-  name            = "opta-sky-de-elb"
+resource "aws_elb" "temp_opta-sky-de" {
+  name            = "temp_opta-sky-de-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
   subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  instances = ["${aws_instance.csportal-che-aza.*.id}"]
 
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     timeout             = 12
     interval            = 30
-    target              = "TCP:86"
+    target              = "TCP:449"
   }
 
   listener {
@@ -378,20 +285,20 @@ resource "aws_elb" "opta-sky-de" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "20min-sportal-de" {
-  name            = "20min-sportal-de-elb"
+resource "aws_elb" "temp_20min-sportal-de" {
+  name            = "temp_20min-sportal-de-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
   subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  instances = ["${aws_instance.csportal-che-aza.*.id}"]
 
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     timeout             = 12
     interval            = 30
-    target              = "TCP:87"
+    target              = "TCP:450"
   }
 
   listener {
@@ -415,26 +322,26 @@ resource "aws_elb" "20min-sportal-de" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "kurier-sportal-de" {
-  name            = "kurier-sportal-de-elb"
+resource "aws_elb" "temp_kurier-sportal-de" {
+  name            = "temp_kurier-sportal-de-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
   subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  instances = ["${aws_instance.csportal-che-aza.*.id}"]
 
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     timeout             = 12
     interval            = 30
-    target              = "TCP:88"
+    target              = "TCP:451"
   }
 
   listener {
     lb_port           = 80
     lb_protocol       = "http"
-    instance_port     = "88"
+    instance_port     = "80"
     instance_protocol = "http"
   }
 
@@ -452,26 +359,26 @@ resource "aws_elb" "kurier-sportal-de" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "t-online-sportal-de" {
-  name            = "t-online-sportal-de-elb"
+resource "aws_elb" "temp_t-online-sportal-de" {
+  name            = "temp_t-online-sportal-de-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
   subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  instances = ["${aws_instance.csportal-che-aza.*.id}"]
 
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     timeout             = 12
     interval            = 30
-    target              = "TCP:89"
+    target              = "TCP:452"
   }
 
   listener {
     lb_port           = 80
     lb_protocol       = "http"
-    instance_port     = "89"
+    instance_port     = "80"
     instance_protocol = "http"
   }
 
@@ -487,8 +394,4 @@ resource "aws_elb" "t-online-sportal-de" {
   idle_timeout                = 400
   connection_draining         = true
   connection_draining_timeout = 400
-}
-
-resource "aws_eip" "web_host_ip" {
-  instance = "${aws_instance.csportal-web-azc.1.id}"
 }
