@@ -1,9 +1,9 @@
-resource "aws_elb" "temp_sportal_web_elb" {
-  name            = "temp_sportal-webelb"
+resource "aws_elb" "temp-sportal_web_elb" {
+  name            = "temp-sportal-webelb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
-  subnets   = ["${aws_subnet.webfe_subnet_a.id}", "${aws_subnet.webfe_subnet_b.id}", "${aws_subnet.webfe_subnet_c.id}"]
+  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
   instances = ["${aws_instance.csportal-che-aza.*.id}"]
   health_check {
     healthy_threshold   = 2
@@ -26,8 +26,8 @@ resource "aws_elb" "temp_sportal_web_elb" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "temp_wintersport-kleinezeitung-at" {
-  name            = "temp_wintersport-kleinezeitung-at-elb"
+resource "aws_elb" "temp-kleinezeitung-at" {
+  name            = "temp-kleinezeitung-at-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
@@ -39,13 +39,13 @@ resource "aws_elb" "temp_wintersport-kleinezeitung-at" {
     unhealthy_threshold = 2
     timeout             = 12
     interval            = 30
-    target              = "HTTP:81/"
+    target              = "TCP:444"
   }
 
   listener {
     lb_port           = 80
     lb_protocol       = "http"
-    instance_port     = "444"
+    instance_port     = "80"
     instance_protocol = "http"
   }
 
@@ -63,8 +63,8 @@ resource "aws_elb" "temp_wintersport-kleinezeitung-at" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "temp_liveticker-sueddeutsche-de" {
-  name            = "temp_liveticker-sueddeutsche-de-elb"
+resource "aws_elb" "temp-lt-sueddeutsche-de" {
+  name            = "temp-lt-sueddeutsche-de-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
@@ -76,13 +76,13 @@ resource "aws_elb" "temp_liveticker-sueddeutsche-de" {
     unhealthy_threshold = 2
     timeout             = 12
     interval            = 30
-    target              = "TCP:82"
+    target              = "TCP:445"
   }
 
   listener {
     lb_port           = 80
     lb_protocol       = "http"
-    instance_port     = "445"
+    instance_port     = "80"
     instance_protocol = "http"
   }
 
@@ -100,8 +100,8 @@ resource "aws_elb" "temp_liveticker-sueddeutsche-de" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "temp_sportdaten-welt-de" {
-  name            = "sportdaten-welt-de-elb"
+resource "aws_elb" "temp-sportdaten-welt-de" {
+  name            = "temp-sportdaten-welt-de"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
@@ -137,8 +137,8 @@ resource "aws_elb" "temp_sportdaten-welt-de" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "temp_sportergebnisse-sueddeutsche" {
-  name            = "temp_sportergebnisse-sueddeutsche-elb"
+resource "aws_elb" "temp-sportsueddeutsche" {
+  name            = "temp-sportsueddeutsche-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
@@ -174,8 +174,8 @@ resource "aws_elb" "temp_sportergebnisse-sueddeutsche" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "temp_welt-sportal-de" {
-  name            = "temp_welt-sportal-de-elb"
+resource "aws_elb" "temp-welt-sportal-de" {
+  name            = "temp-welt-sportal-de-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
@@ -211,8 +211,8 @@ resource "aws_elb" "temp_welt-sportal-de" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "temp_liveticker-stern-de" {
-  name            = "temp_liveticker-stern-de-elb"
+resource "aws_elb" "temp-liveticker-stern-de" {
+  name            = "temp-liveticker-stern-de-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
@@ -248,8 +248,8 @@ resource "aws_elb" "temp_liveticker-stern-de" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "temp_opta-sky-de" {
-  name            = "temp_opta-sky-de-elb"
+resource "aws_elb" "temp-opta-sky-de" {
+  name            = "temp-opta-sky-de-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
@@ -285,8 +285,8 @@ resource "aws_elb" "temp_opta-sky-de" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "temp_20min-sportal-de" {
-  name            = "temp_20min-sportal-de-elb"
+resource "aws_elb" "temp-20min-sportal-de" {
+  name            = "temp-20min-sportal-de-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
@@ -322,8 +322,8 @@ resource "aws_elb" "temp_20min-sportal-de" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "temp_kurier-sportal-de" {
-  name            = "temp_kurier-sportal-de-elb"
+resource "aws_elb" "temp-kurier-sportal-de" {
+  name            = "temp-kurier-sportal-de-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
@@ -359,8 +359,8 @@ resource "aws_elb" "temp_kurier-sportal-de" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "temp_t-online-sportal-de" {
-  name            = "temp_t-online-sportal-de-elb"
+resource "aws_elb" "temp-t-online-sportal-de" {
+  name            = "temp-t-online-sportal-de-elb"
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
