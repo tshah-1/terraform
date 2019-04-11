@@ -1,6 +1,6 @@
 resource "aws_launch_configuration" "web-launchconfig" {
   name_prefix     = "web-launchconfig"
-  image_id        = "ami-044d6ea958a79824d"
+  image_id        = "ami-0c17326b5ed5ed8ec"
   instance_type   = "t3.medium"
   key_name        = "${var.keys["${terraform.workspace}"]}"
   security_groups = ["${aws_security_group.sportal_web.id}"]
