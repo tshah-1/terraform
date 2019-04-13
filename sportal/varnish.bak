@@ -2,17 +2,16 @@ variable "num_instances_che_aza" {
   default = 1
 }
 variable "num_instances_che_azb" {
-  default = 1
+  default = 0
 }
 variable "num_instances_che_azc" {
-  default = 1
+  default = 0
 }
 
 resource "aws_instance" "csportal-che-aza" {
-  ami                         = "ami-0246e172288e11de0"
+  ami                         = "ami-0f608eb5dfd622ec7"
   key_name                    = "${var.keys["${terraform.workspace}"]}"
- # instance_type               = "r5a.2xlarge"
-  instance_type               = "t3.small"
+  instance_type               = "r5a.2xlarge"
   vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
   subnet_id                   = "${aws_subnet.webfe_subnet_a.id}"
   count                       = "${var.num_instances_che_aza}"
@@ -25,7 +24,7 @@ resource "aws_instance" "csportal-che-aza" {
 
 resource "aws_route53_record" "csportal-che-aza" {
   // same number of records as instances
-  count   = "${var.num_instances_che_aza}"
+  count   = "${var.num_instances_web_aza}"
   zone_id = "${aws_route53_zone.sportal.zone_id}"
   name    = "${format("csportal-che-a%02d",count.index+1)}"
   type    = "A"
@@ -36,9 +35,9 @@ resource "aws_route53_record" "csportal-che-aza" {
 }
 
 resource "aws_instance" "csportal-che-azb" {
-  ami                         = "ami-0246e172288e11de0"
+  ami                         = "ami-0f608eb5dfd622ec7"
   key_name                    = "${var.keys["${terraform.workspace}"]}"
-  instance_type               = "t3.small"
+  instance_type               = "r5a.2xlarge"
   vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
   subnet_id                   = "${aws_subnet.webfe_subnet_b.id}"
   count                       = "${var.num_instances_che_azb}"
@@ -51,7 +50,7 @@ resource "aws_instance" "csportal-che-azb" {
 
 resource "aws_route53_record" "csportal-che-azb" {
   // same number of records as instances
-  count   = "${var.num_instances_che_azb}"
+  count   = "${var.num_instances_web_azb}"
   zone_id = "${aws_route53_zone.sportal.zone_id}"
   name    = "${format("csportal-che-b%02d",count.index+1)}"
   type    = "A"
@@ -62,9 +61,9 @@ resource "aws_route53_record" "csportal-che-azb" {
 }
 
 resource "aws_instance" "csportal-che-azc" {
-  ami                         = "ami-0246e172288e11de0"
+  ami                         = "ami-0f608eb5dfd622ec7"
   key_name                    = "${var.keys["${terraform.workspace}"]}"
-  instance_type               = "t3.small"
+  instance_type               = "r5a.2xlarge"
   vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
   subnet_id                   = "${aws_subnet.webfe_subnet_c.id}"
   count                       = "${var.num_instances_che_azc}"
@@ -77,7 +76,7 @@ resource "aws_instance" "csportal-che-azc" {
 
 resource "aws_route53_record" "csportal-che-azc" {
   // same number of records as instances
-  count   = "${var.num_instances_che_azc}"
+  count   = "${var.num_instances_web_azc}"
   zone_id = "${aws_route53_zone.sportal.zone_id}"
   name    = "${format("csportal-che-c%02d",count.index+1)}"
   type    = "A"

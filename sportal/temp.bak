@@ -119,7 +119,7 @@ resource "aws_elb" "temp-sportdaten-welt-de" {
   listener {
     lb_port           = 80
     lb_protocol       = "http"
-    instance_port     = "84"
+    instance_port     = "80"
     instance_protocol = "http"
   }
 
@@ -156,7 +156,7 @@ resource "aws_elb" "temp-sportsueddeutsche" {
   listener {
     lb_port           = 80
     lb_protocol       = "http"
-    instance_port     = "83"
+    instance_port     = "80"
     instance_protocol = "http"
   }
 
@@ -193,7 +193,7 @@ resource "aws_elb" "temp-welt-sportal-de" {
   listener {
     lb_port           = 80
     lb_protocol       = "http"
-    instance_port     = "90"
+    instance_port     = "80"
     instance_protocol = "http"
   }
 
@@ -230,7 +230,7 @@ resource "aws_elb" "temp-liveticker-stern-de" {
   listener {
     lb_port           = 80
     lb_protocol       = "http"
-    instance_port     = "85"
+    instance_port     = "80"
     instance_protocol = "http"
   }
 
@@ -267,7 +267,7 @@ resource "aws_elb" "temp-opta-sky-de" {
   listener {
     lb_port           = 80
     lb_protocol       = "http"
-    instance_port     = "86"
+    instance_port     = "80"
     instance_protocol = "http"
   }
 
@@ -304,7 +304,7 @@ resource "aws_elb" "temp-20min-sportal-de" {
   listener {
     lb_port           = 80
     lb_protocol       = "http"
-    instance_port     = "87"
+    instance_port     = "80"
     instance_protocol = "http"
   }
 

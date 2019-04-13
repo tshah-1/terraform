@@ -1,7 +1,7 @@
 resource "aws_efs_file_system" "sportal-web" {
   creation_token                  = "sportalweb"
   performance_mode                = "generalPurpose"
-  throughput_mode                 = "provisioned"
+  throughput_mode                 = "bursting"
   provisioned_throughput_in_mibps = "256"
   encrypted                       = "true"
 

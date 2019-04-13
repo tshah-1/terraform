@@ -53,3 +53,4 @@
 190.0.139.36/32
 81.210.27.218/32
 135.84.167.41/32 # NY Office - 28 Liberty new floor
+164.39.70.200/29 # leeds white rose
