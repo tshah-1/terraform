@@ -90,7 +90,7 @@ resource "aws_route53_record" "csportal-web-azc" {
 
 resource "aws_elb" "sportal_web_elb" {
   name            = "sportal-webelb"
-  security_groups = ["${aws_security_group.sportal_web_elb.id}"]
+  security_groups = ["${aws_security_group.sportal_web_elb.id}", "${aws_security_group.sportal_web_apex_instance.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
   subnets   = ["${aws_subnet.webfe_subnet_a.id}", "${aws_subnet.webfe_subnet_b.id}", "${aws_subnet.webfe_subnet_c.id}"]
