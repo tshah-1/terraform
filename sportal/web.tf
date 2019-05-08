@@ -500,3 +500,75 @@ resource "aws_elb" "t-online-sportal-de" {
 resource "aws_eip" "web_host_ip" {
   instance = "${aws_instance.csportal-web-azc.0.id}"
 }
+
+resource "aws_elb" "t-online-sportal-de-2" {
+  name            = "t-online-sportal-de-elb-2"
+  security_groups = ["${aws_security_group.sportal_web_elb.id}"]
+
+  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 12
+    interval            = 30
+    target              = "HTTP:80/"
+  }
+
+  listener {
+    lb_port           = 80
+    lb_protocol       = "http"
+    instance_port     = "80"
+    instance_protocol = "http"
+  }
+
+  listener {
+    lb_port            = 443
+    lb_protocol        = "https"
+    instance_port      = "452"
+    instance_protocol  = "https"
+    ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/f20c9c28-58e0-4548-a022-ef7b54c05b4e"
+  }
+
+  cross_zone_load_balancing   = true
+  idle_timeout                = 400
+  connection_draining         = true
+  connection_draining_timeout = 400
+}
+
+resource "aws_elb" "kicker-de-elb" {
+  name            = "kicker-de-elb"
+  security_groups = ["${aws_security_group.sportal_web_elb.id}"]
+
+  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 12
+    interval            = 30
+    target              = "HTTP:80/"
+  }
+
+  listener {
+    lb_port           = 80
+    lb_protocol       = "http"
+    instance_port     = "80"
+    instance_protocol = "http"
+  }
+
+  listener {
+    lb_port            = 443
+    lb_protocol        = "https"
+    instance_port      = "454"
+    instance_protocol  = "https"
+    ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/ed48ede0-aaf3-43a7-a0f3-32ca246620c4"
+  }
+
+  cross_zone_load_balancing   = true
+  idle_timeout                = 400
+  connection_draining         = true
+  connection_draining_timeout = 400
+}
