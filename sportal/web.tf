@@ -549,7 +549,7 @@ resource "aws_elb" "kicker-de-elb" {
     unhealthy_threshold = 2
     timeout             = 12
     interval            = 30
-    target              = "HTTP:80/"
+    target              = "HTTP:8080/"
   }
 
   listener {
