@@ -52,6 +52,14 @@ resource "aws_security_group" "sportal_web" {
 
   ingress {
     security_groups = ["${aws_security_group.sportal_web_elb.id}", "${aws_security_group.openvpn.id}", "${aws_security_group.sportal_web_int_elb.id}"]
+    from_port       = 8080
+    to_port         = 8080
+    protocol        = "tcp"
+    self            = true
+  }
+
+  ingress {
+    security_groups = ["${aws_security_group.sportal_web_elb.id}", "${aws_security_group.openvpn.id}", "${aws_security_group.sportal_web_int_elb.id}"]
     from_port       = 443
     to_port         = 454
     protocol        = "tcp"
