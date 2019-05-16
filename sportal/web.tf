@@ -3,11 +3,11 @@ variable "num_instances_web_aza" {
 }
 
 variable "num_instances_web_azb" {
-  default = 1
+  default = 2
 }
 
 variable "num_instances_web_azc" {
-  default = 1
+  default = 2
 }
 
 resource "aws_instance" "csportal-web-aza" {
@@ -37,7 +37,7 @@ resource "aws_route53_record" "csportal-web-aza" {
 }
 
 resource "aws_instance" "csportal-web-azb" {
-  ami                         = "ami-0ea2ce632f8f3f1e4"
+  ami                         = "ami-0abc3a165de8eca35"
   key_name                    = "${var.keys["${terraform.workspace}"]}"
   instance_type               = "t3.medium"
   vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
@@ -63,7 +63,7 @@ resource "aws_route53_record" "csportal-web-azb" {
 }
 
 resource "aws_instance" "csportal-web-azc" {
-  ami                         = "ami-0ea2ce632f8f3f1e4"
+  ami                         = "ami-0abc3a165de8eca35"
   key_name                    = "${var.keys["${terraform.workspace}"]}"
   instance_type               = "t3.medium"
   vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
