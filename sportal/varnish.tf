@@ -1,17 +1,20 @@
 variable "num_instances_che_aza" {
   default = 1
 }
+
 variable "num_instances_che_azb" {
   default = 1
 }
+
 variable "num_instances_che_azc" {
   default = 1
 }
 
 resource "aws_instance" "csportal-che-aza" {
-  ami                         = "ami-0246e172288e11de0"
-  key_name                    = "${var.keys["${terraform.workspace}"]}"
- # instance_type               = "r5a.2xlarge"
+  ami      = "ami-0246e172288e11de0"
+  key_name = "${var.keys["${terraform.workspace}"]}"
+
+  # instance_type               = "r5a.2xlarge"
   instance_type               = "t3.small"
   vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
   subnet_id                   = "${aws_subnet.webfe_subnet_a.id}"

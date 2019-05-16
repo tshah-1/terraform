@@ -93,8 +93,9 @@ resource "aws_elb" "sportal_web_elb" {
   security_groups = ["${aws_security_group.sportal_web_elb.id}", "${aws_security_group.sportal_web_apex_instance.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
-  subnets   = ["${aws_subnet.webfe_subnet_a.id}", "${aws_subnet.webfe_subnet_b.id}", "${aws_subnet.webfe_subnet_c.id}"]
- # instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  subnets = ["${aws_subnet.webfe_subnet_a.id}", "${aws_subnet.webfe_subnet_b.id}", "${aws_subnet.webfe_subnet_c.id}"]
+
+  # instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
   instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
 
   health_check {
@@ -123,8 +124,9 @@ resource "aws_elb" "wintersport-kleinezeitung-at" {
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
-  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-#  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+
+  #  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
   instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
 
   health_check {
@@ -161,9 +163,11 @@ resource "aws_elb" "liveticker-sueddeutsche-de" {
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
-  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
- # instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+
+  # instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
   instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
@@ -198,9 +202,10 @@ resource "aws_elb" "sportdaten-welt-de" {
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
-  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-#  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
-   instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+
+  #  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
 
   health_check {
     healthy_threshold   = 2
@@ -236,8 +241,9 @@ resource "aws_elb" "sportergebnisse-sueddeutsche" {
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
-  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-#  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+
+  #  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
   instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
 
   health_check {
@@ -274,8 +280,9 @@ resource "aws_elb" "welt-sportal-de" {
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
-  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-#  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+
+  #  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
   instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
 
   health_check {
@@ -312,8 +319,9 @@ resource "aws_elb" "liveticker-stern-de" {
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
-  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-#  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+
+  #  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
   instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
 
   health_check {
@@ -350,8 +358,9 @@ resource "aws_elb" "opta-sky-de" {
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
-  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-#  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+
+  #  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
   instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
 
   health_check {
@@ -388,8 +397,9 @@ resource "aws_elb" "20min-sportal-de" {
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
-  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-#  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+
+  #  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
   instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
 
   health_check {
@@ -426,8 +436,9 @@ resource "aws_elb" "kurier-sportal-de" {
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
-  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-#  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+
+  #  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
   instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
 
   health_check {
@@ -464,8 +475,9 @@ resource "aws_elb" "t-online-sportal-de" {
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   #  availability_zones = ["${data.aws_availability_zones.all.names}"]
-  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-#  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
+  subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+
+  #  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
   instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
 
   health_check {

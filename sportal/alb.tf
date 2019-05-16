@@ -1,103 +1,107 @@
 resource "aws_alb" "sportal_alb" {
   name            = "sportal-alb"
-  internal	=	false
+  internal        = false
   security_groups = ["${aws_security_group.sportal_web_elb.id}", "${aws_security_group.sportal_web_apex_instance.id}"]
-  subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+  subnets         = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
+
   tags {
-    name            = "sportal-alb"
+    name = "sportal-alb"
   }
 }
+
 resource "aws_alb_target_group" "sportal_alb_http" {
-	name	= "sportal-alb-http"
-  vpc_id     = "${aws_vpc.main.id}"
-	port	= "80"
-	protocol	= "HTTP"
-	health_check {
-                path = "/"
-                port = "80"
-                protocol = "HTTP"
-                healthy_threshold = 2
-                unhealthy_threshold = 2
-                interval = 5
-                timeout = 4
-                matcher = "200-308"
-        }
+  name     = "sportal-alb-http"
+  vpc_id   = "${aws_vpc.main.id}"
+  port     = "80"
+  protocol = "HTTP"
+
+  health_check {
+    path                = "/"
+    port                = "80"
+    protocol            = "HTTP"
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 5
+    timeout             = 4
+    matcher             = "200-308"
+  }
 }
 
 resource "aws_alb_target_group_attachment" "sportal_alb_be_http_aza" {
   target_group_arn = "${aws_alb_target_group.sportal_alb_http.arn}"
-  target_id = "${aws_instance.csportal-webserver-aza.id}"
+  target_id        = "${aws_instance.csportal-webserver-aza.id}"
   port             = 80
 }
 
 resource "aws_alb_target_group_attachment" "sportal_alb_be_http_azb" {
   target_group_arn = "${aws_alb_target_group.sportal_alb_http.arn}"
-  target_id = "${aws_instance.csportal-webserver-azb.id}"
+  target_id        = "${aws_instance.csportal-webserver-azb.id}"
   port             = 80
 }
 
 resource "aws_alb_target_group_attachment" "sportal_alb_be_http_azc" {
   target_group_arn = "${aws_alb_target_group.sportal_alb_http.arn}"
-  target_id = "${aws_instance.csportal-webserver-azc.id}"
+  target_id        = "${aws_instance.csportal-webserver-azc.id}"
   port             = 80
 }
 
-
 resource "aws_alb_target_group" "sportal_alb_https" {
-        name    = "sportal-alb-https"
-  vpc_id     = "${aws_vpc.main.id}"
-        port    = "443"
-        protocol        = "HTTPS"
-        health_check {
-                port = "80"
-                protocol = "HTTP"
-                healthy_threshold = 2
-                unhealthy_threshold = 2
-                interval = 5
-                timeout = 4
-                matcher = "200-308"
-        }
+  name     = "sportal-alb-https"
+  vpc_id   = "${aws_vpc.main.id}"
+  port     = "443"
+  protocol = "HTTPS"
+
+  health_check {
+    port                = "80"
+    protocol            = "HTTP"
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 5
+    timeout             = 4
+    matcher             = "200-308"
+  }
 }
 
 resource "aws_alb_target_group_attachment" "sportal_alb_https_aza" {
   target_group_arn = "${aws_alb_target_group.sportal_alb_https.arn}"
- target_id = "${aws_instance.csportal-webserver-aza.id}"
+  target_id        = "${aws_instance.csportal-webserver-aza.id}"
   port             = 444
 }
 
 resource "aws_alb_target_group_attachment" "sportal_alb_https_azb" {
   target_group_arn = "${aws_alb_target_group.sportal_alb_https.arn}"
- target_id = "${aws_instance.csportal-webserver-azb.id}"
+  target_id        = "${aws_instance.csportal-webserver-azb.id}"
   port             = 444
 }
 
 resource "aws_alb_target_group_attachment" "sportal_alb_https_azc" {
   target_group_arn = "${aws_alb_target_group.sportal_alb_https.arn}"
- target_id = "${aws_instance.csportal-webserver-azc.id}"
+  target_id        = "${aws_instance.csportal-webserver-azc.id}"
   port             = 444
 }
 
 resource "aws_alb_listener" "sportal_alb_http" {
-	load_balancer_arn	=	"${aws_alb.sportal_alb.arn}"
-	port			=	"80"
-	protocol		=	"HTTP"
-	default_action {
-		target_group_arn	=	"${aws_alb_target_group.sportal_alb_http.arn}"
-		type			=	"forward"
-	}
+  load_balancer_arn = "${aws_alb.sportal_alb.arn}"
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    target_group_arn = "${aws_alb_target_group.sportal_alb_http.arn}"
+    type             = "forward"
+  }
 }
 
 resource "aws_alb_listener" "sportal_alb_https" {
-        load_balancer_arn       =       "${aws_alb.sportal_alb.arn}"
-        port                    =       "443"
-        protocol                =       "HTTPS"
-	ssl_policy		=	"ELBSecurityPolicy-2016-08"
-	certificate_arn		=	"arn:aws:acm:eu-central-1:884237813524:certificate/f20c9c28-58e0-4548-a022-ef7b54c05b4e"
+  load_balancer_arn = "${aws_alb.sportal_alb.arn}"
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = "arn:aws:acm:eu-central-1:884237813524:certificate/f20c9c28-58e0-4548-a022-ef7b54c05b4e"
 
-        default_action {
-                target_group_arn        =       "${aws_alb_target_group.sportal_alb_https.arn}"
-                type                    =       "forward"
-        }
+  default_action {
+    target_group_arn = "${aws_alb_target_group.sportal_alb_https.arn}"
+    type             = "forward"
+  }
 }
 
 resource "aws_lb_listener_certificate" "liveticker-sueddeutsche-de" {
@@ -106,37 +110,38 @@ resource "aws_lb_listener_certificate" "liveticker-sueddeutsche-de" {
 }
 
 resource "aws_alb_target_group" "liveticker-sueddeutsche-de" {
-        name    = "liveticker-sueddeutsche-de-https"
-  vpc_id     = "${aws_vpc.main.id}"
-        port    = "443"
-        protocol        = "HTTPS"
-        health_check {
-                path = "/"
-                port = "80"
-                protocol = "HTTP"
-                healthy_threshold = 2
-                unhealthy_threshold = 2
-                interval = 5
-                timeout = 4
-                matcher = "200-308"
-        }
+  name     = "liveticker-sueddeutsche-de-https"
+  vpc_id   = "${aws_vpc.main.id}"
+  port     = "443"
+  protocol = "HTTPS"
+
+  health_check {
+    path                = "/"
+    port                = "80"
+    protocol            = "HTTP"
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 5
+    timeout             = 4
+    matcher             = "200-308"
+  }
 }
 
 resource "aws_alb_target_group_attachment" "liveticker-sueddeutsche-de-aza" {
   target_group_arn = "${aws_alb_target_group.liveticker-sueddeutsche-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-aza.id}"
+  target_id        = "${aws_instance.csportal-webserver-aza.id}"
   port             = 445
 }
 
 resource "aws_alb_target_group_attachment" "liveticker-sueddeutsche-de-azb" {
   target_group_arn = "${aws_alb_target_group.liveticker-sueddeutsche-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-azb.id}"
+  target_id        = "${aws_instance.csportal-webserver-azb.id}"
   port             = 445
 }
 
 resource "aws_alb_target_group_attachment" "liveticker-sueddeutsche-de-azc" {
   target_group_arn = "${aws_alb_target_group.liveticker-sueddeutsche-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-azc.id}"
+  target_id        = "${aws_instance.csportal-webserver-azc.id}"
   port             = 445
 }
 
@@ -178,37 +183,38 @@ resource "aws_lb_listener_certificate" "wsport-kleinezeitung" {
 }
 
 resource "aws_alb_target_group" "wsport-kleinezeitung" {
-        name    = "wsport-kleinezeitung-https"
-  vpc_id     = "${aws_vpc.main.id}"
-        port    = "443"
-        protocol        = "HTTPS"
-        health_check {
-                path = "/"
-                port = "80"
-                protocol = "HTTP"
-                healthy_threshold = 2
-                unhealthy_threshold = 2
-                interval = 5
-                timeout = 4
-                matcher = "200-308"
-        }
+  name     = "wsport-kleinezeitung-https"
+  vpc_id   = "${aws_vpc.main.id}"
+  port     = "443"
+  protocol = "HTTPS"
+
+  health_check {
+    path                = "/"
+    port                = "80"
+    protocol            = "HTTP"
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 5
+    timeout             = 4
+    matcher             = "200-308"
+  }
 }
 
 resource "aws_alb_target_group_attachment" "wsport-kleinezeitung-aza" {
   target_group_arn = "${aws_alb_target_group.wsport-kleinezeitung.arn}"
-  target_id = "${aws_instance.csportal-webserver-aza.id}"
+  target_id        = "${aws_instance.csportal-webserver-aza.id}"
   port             = 444
 }
 
 resource "aws_alb_target_group_attachment" "wsport-kleinezeitung-azb" {
   target_group_arn = "${aws_alb_target_group.wsport-kleinezeitung.arn}"
-  target_id = "${aws_instance.csportal-webserver-azb.id}"
+  target_id        = "${aws_instance.csportal-webserver-azb.id}"
   port             = 444
 }
 
 resource "aws_alb_target_group_attachment" "wsport-kleinezeitung-azc" {
   target_group_arn = "${aws_alb_target_group.wsport-kleinezeitung.arn}"
-  target_id = "${aws_instance.csportal-webserver-azc.id}"
+  target_id        = "${aws_instance.csportal-webserver-azc.id}"
   port             = 444
 }
 
@@ -250,37 +256,38 @@ resource "aws_lb_listener_certificate" "sportdaten-welt-de" {
 }
 
 resource "aws_alb_target_group" "sportdaten-welt-de" {
-        name    = "sportdaten-welt-de-https"
-  vpc_id     = "${aws_vpc.main.id}"
-        port    = "443"
-        protocol        = "HTTPS"
-        health_check {
-                path = "/"
-                port = "80"
-                protocol = "HTTP"
-                healthy_threshold = 2
-                unhealthy_threshold = 2
-                interval = 5
-                timeout = 4
-                matcher = "200-308"
-        }
+  name     = "sportdaten-welt-de-https"
+  vpc_id   = "${aws_vpc.main.id}"
+  port     = "443"
+  protocol = "HTTPS"
+
+  health_check {
+    path                = "/"
+    port                = "80"
+    protocol            = "HTTP"
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 5
+    timeout             = 4
+    matcher             = "200-308"
+  }
 }
 
 resource "aws_alb_target_group_attachment" "sportdaten-welt-de-aza" {
   target_group_arn = "${aws_alb_target_group.sportdaten-welt-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-aza.id}"
+  target_id        = "${aws_instance.csportal-webserver-aza.id}"
   port             = 447
 }
 
 resource "aws_alb_target_group_attachment" "sportdaten-welt-de-azb" {
   target_group_arn = "${aws_alb_target_group.sportdaten-welt-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-azb.id}"
+  target_id        = "${aws_instance.csportal-webserver-azb.id}"
   port             = 447
 }
 
 resource "aws_alb_target_group_attachment" "sportdaten-welt-de-azc" {
   target_group_arn = "${aws_alb_target_group.sportdaten-welt-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-azc.id}"
+  target_id        = "${aws_instance.csportal-webserver-azc.id}"
   port             = 447
 }
 
@@ -322,37 +329,38 @@ resource "aws_lb_listener_certificate" "sportergebnisse-sd" {
 }
 
 resource "aws_alb_target_group" "sportergebnisse-sd" {
-        name    = "sportergebnisse-sd-https"
-  vpc_id     = "${aws_vpc.main.id}"
-        port    = "443"
-        protocol        = "HTTPS"
-        health_check {
-                path = "/"
-                port = "80"
-                protocol = "HTTP"
-                healthy_threshold = 2
-                unhealthy_threshold = 2
-                interval = 5
-                timeout = 4
-                matcher = "200-308"
-        }
+  name     = "sportergebnisse-sd-https"
+  vpc_id   = "${aws_vpc.main.id}"
+  port     = "443"
+  protocol = "HTTPS"
+
+  health_check {
+    path                = "/"
+    port                = "80"
+    protocol            = "HTTP"
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 5
+    timeout             = 4
+    matcher             = "200-308"
+  }
 }
 
 resource "aws_alb_target_group_attachment" "sportergebnisse-sd-aza" {
   target_group_arn = "${aws_alb_target_group.sportergebnisse-sd.arn}"
-  target_id = "${aws_instance.csportal-webserver-aza.id}"
+  target_id        = "${aws_instance.csportal-webserver-aza.id}"
   port             = 446
 }
 
 resource "aws_alb_target_group_attachment" "sportergebnisse-sd-azb" {
   target_group_arn = "${aws_alb_target_group.sportergebnisse-sd.arn}"
-  target_id = "${aws_instance.csportal-webserver-azb.id}"
+  target_id        = "${aws_instance.csportal-webserver-azb.id}"
   port             = 446
 }
 
 resource "aws_alb_target_group_attachment" "sportergebnisse-sd-azc" {
   target_group_arn = "${aws_alb_target_group.sportergebnisse-sd.arn}"
-  target_id = "${aws_instance.csportal-webserver-azc.id}"
+  target_id        = "${aws_instance.csportal-webserver-azc.id}"
   port             = 446
 }
 
@@ -394,37 +402,38 @@ resource "aws_lb_listener_certificate" "welt-sportal-de" {
 }
 
 resource "aws_alb_target_group" "welt-sportal-de" {
-        name    = "welt-sportal-de-https"
-  vpc_id     = "${aws_vpc.main.id}"
-        port    = "443"
-        protocol        = "HTTPS"
-        health_check {
-                path = "/"
-                port = "80"
-                protocol = "HTTP"
-                healthy_threshold = 2
-                unhealthy_threshold = 2
-                interval = 5
-                timeout = 4
-                matcher = "200-308"
-        }
+  name     = "welt-sportal-de-https"
+  vpc_id   = "${aws_vpc.main.id}"
+  port     = "443"
+  protocol = "HTTPS"
+
+  health_check {
+    path                = "/"
+    port                = "80"
+    protocol            = "HTTP"
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 5
+    timeout             = 4
+    matcher             = "200-308"
+  }
 }
 
 resource "aws_alb_target_group_attachment" "welt-sportal-de-aza" {
   target_group_arn = "${aws_alb_target_group.welt-sportal-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-aza.id}"
+  target_id        = "${aws_instance.csportal-webserver-aza.id}"
   port             = 453
 }
 
 resource "aws_alb_target_group_attachment" "welt-sportal-de-azb" {
   target_group_arn = "${aws_alb_target_group.welt-sportal-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-azb.id}"
+  target_id        = "${aws_instance.csportal-webserver-azb.id}"
   port             = 453
 }
 
 resource "aws_alb_target_group_attachment" "welt-sportal-de-azc" {
   target_group_arn = "${aws_alb_target_group.welt-sportal-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-azc.id}"
+  target_id        = "${aws_instance.csportal-webserver-azc.id}"
   port             = 453
 }
 
@@ -466,37 +475,38 @@ resource "aws_lb_listener_certificate" "liveticker-stern-de" {
 }
 
 resource "aws_alb_target_group" "liveticker-stern-de" {
-        name    = "liveticker-stern-de-https"
-  vpc_id     = "${aws_vpc.main.id}"
-        port    = "443"
-        protocol        = "HTTPS"
-        health_check {
-                path = "/"
-                port = "80"
-                protocol = "HTTP"
-                healthy_threshold = 2
-                unhealthy_threshold = 2
-                interval = 5
-                timeout = 4
-                matcher = "200-308"
-        }
+  name     = "liveticker-stern-de-https"
+  vpc_id   = "${aws_vpc.main.id}"
+  port     = "443"
+  protocol = "HTTPS"
+
+  health_check {
+    path                = "/"
+    port                = "80"
+    protocol            = "HTTP"
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 5
+    timeout             = 4
+    matcher             = "200-308"
+  }
 }
 
 resource "aws_alb_target_group_attachment" "liveticker-stern-de-aza" {
   target_group_arn = "${aws_alb_target_group.liveticker-stern-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-aza.id}"
+  target_id        = "${aws_instance.csportal-webserver-aza.id}"
   port             = 448
 }
 
 resource "aws_alb_target_group_attachment" "liveticker-stern-de-azb" {
   target_group_arn = "${aws_alb_target_group.liveticker-stern-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-azb.id}"
+  target_id        = "${aws_instance.csportal-webserver-azb.id}"
   port             = 448
 }
 
 resource "aws_alb_target_group_attachment" "liveticker-stern-de-azc" {
   target_group_arn = "${aws_alb_target_group.liveticker-stern-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-azc.id}"
+  target_id        = "${aws_instance.csportal-webserver-azc.id}"
   port             = 448
 }
 
@@ -538,37 +548,38 @@ resource "aws_lb_listener_certificate" "opta-sky-de" {
 }
 
 resource "aws_alb_target_group" "opta-sky-de" {
-        name    = "opta-sky-de-https"
-  vpc_id     = "${aws_vpc.main.id}"
-        port    = "443"
-        protocol        = "HTTPS"
-        health_check {
-                path = "/"
-                port = "80"
-                protocol = "HTTP"
-                healthy_threshold = 2
-                unhealthy_threshold = 2
-                interval = 5
-                timeout = 4
-                matcher = "200-308"
-        }
+  name     = "opta-sky-de-https"
+  vpc_id   = "${aws_vpc.main.id}"
+  port     = "443"
+  protocol = "HTTPS"
+
+  health_check {
+    path                = "/"
+    port                = "80"
+    protocol            = "HTTP"
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 5
+    timeout             = 4
+    matcher             = "200-308"
+  }
 }
 
 resource "aws_alb_target_group_attachment" "opta-sky-de-aza" {
   target_group_arn = "${aws_alb_target_group.opta-sky-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-aza.id}"
+  target_id        = "${aws_instance.csportal-webserver-aza.id}"
   port             = 448
 }
 
 resource "aws_alb_target_group_attachment" "opta-sky-de-azb" {
   target_group_arn = "${aws_alb_target_group.opta-sky-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-azb.id}"
+  target_id        = "${aws_instance.csportal-webserver-azb.id}"
   port             = 448
 }
 
 resource "aws_alb_target_group_attachment" "opta-sky-de-azc" {
   target_group_arn = "${aws_alb_target_group.opta-sky-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-azc.id}"
+  target_id        = "${aws_instance.csportal-webserver-azc.id}"
   port             = 448
 }
 
@@ -610,37 +621,38 @@ resource "aws_lb_listener_certificate" "20min-sportal-de" {
 }
 
 resource "aws_alb_target_group" "20min-sportal-de" {
-        name    = "20min-sportal-de-https"
-  vpc_id     = "${aws_vpc.main.id}"
-        port    = "443"
-        protocol        = "HTTPS"
-        health_check {
-                path = "/"
-                port = "80"
-                protocol = "HTTP"
-                healthy_threshold = 2
-                unhealthy_threshold = 2
-                interval = 5
-                timeout = 4
-                matcher = "200-308"
-        }
+  name     = "20min-sportal-de-https"
+  vpc_id   = "${aws_vpc.main.id}"
+  port     = "443"
+  protocol = "HTTPS"
+
+  health_check {
+    path                = "/"
+    port                = "80"
+    protocol            = "HTTP"
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 5
+    timeout             = 4
+    matcher             = "200-308"
+  }
 }
 
 resource "aws_alb_target_group_attachment" "20min-sportal-de-aza" {
   target_group_arn = "${aws_alb_target_group.20min-sportal-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-aza.id}"
+  target_id        = "${aws_instance.csportal-webserver-aza.id}"
   port             = 450
 }
 
 resource "aws_alb_target_group_attachment" "20min-sportal-de-azb" {
   target_group_arn = "${aws_alb_target_group.20min-sportal-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-azb.id}"
+  target_id        = "${aws_instance.csportal-webserver-azb.id}"
   port             = 450
 }
 
 resource "aws_alb_target_group_attachment" "20min-sportal-de-azc" {
   target_group_arn = "${aws_alb_target_group.20min-sportal-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-azc.id}"
+  target_id        = "${aws_instance.csportal-webserver-azc.id}"
   port             = 450
 }
 
@@ -682,37 +694,38 @@ resource "aws_lb_listener_certificate" "kurier-sportal-de" {
 }
 
 resource "aws_alb_target_group" "kurier-sportal-de" {
-        name    = "kurier-sportal-de-https"
-  vpc_id     = "${aws_vpc.main.id}"
-        port    = "443"
-        protocol        = "HTTPS"
-        health_check {
-                path = "/"
-                port = "80"
-                protocol = "HTTP"
-                healthy_threshold = 2
-                unhealthy_threshold = 2
-                interval = 5
-                timeout = 4
-                matcher = "200-308"
-        }
+  name     = "kurier-sportal-de-https"
+  vpc_id   = "${aws_vpc.main.id}"
+  port     = "443"
+  protocol = "HTTPS"
+
+  health_check {
+    path                = "/"
+    port                = "80"
+    protocol            = "HTTP"
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 5
+    timeout             = 4
+    matcher             = "200-308"
+  }
 }
 
 resource "aws_alb_target_group_attachment" "kurier-sportal-de-aza" {
   target_group_arn = "${aws_alb_target_group.kurier-sportal-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-aza.id}"
+  target_id        = "${aws_instance.csportal-webserver-aza.id}"
   port             = 451
 }
 
 resource "aws_alb_target_group_attachment" "kurier-sportal-de-azb" {
   target_group_arn = "${aws_alb_target_group.kurier-sportal-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-azb.id}"
+  target_id        = "${aws_instance.csportal-webserver-azb.id}"
   port             = 451
 }
 
 resource "aws_alb_target_group_attachment" "kurier-sportal-de-azc" {
   target_group_arn = "${aws_alb_target_group.kurier-sportal-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-azc.id}"
+  target_id        = "${aws_instance.csportal-webserver-azc.id}"
   port             = 451
 }
 
@@ -754,37 +767,38 @@ resource "aws_lb_listener_certificate" "t-online-sportal-de" {
 }
 
 resource "aws_alb_target_group" "t-online-sportal-de" {
-        name    = "t-online-sportal-de-https"
-  vpc_id     = "${aws_vpc.main.id}"
-        port    = "443"
-        protocol        = "HTTPS"
-        health_check {
-                path = "/"
-                port = "80"
-                protocol = "HTTP"
-                healthy_threshold = 2
-                unhealthy_threshold = 2
-                interval = 5
-                timeout = 4
-                matcher = "200-308"
-        }
+  name     = "t-online-sportal-de-https"
+  vpc_id   = "${aws_vpc.main.id}"
+  port     = "443"
+  protocol = "HTTPS"
+
+  health_check {
+    path                = "/"
+    port                = "80"
+    protocol            = "HTTP"
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 5
+    timeout             = 4
+    matcher             = "200-308"
+  }
 }
 
 resource "aws_alb_target_group_attachment" "t-online-sportal-de-aza" {
   target_group_arn = "${aws_alb_target_group.t-online-sportal-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-aza.id}"
+  target_id        = "${aws_instance.csportal-webserver-aza.id}"
   port             = 452
 }
 
 resource "aws_alb_target_group_attachment" "t-online-sportal-de-azb" {
   target_group_arn = "${aws_alb_target_group.t-online-sportal-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-azb.id}"
+  target_id        = "${aws_instance.csportal-webserver-azb.id}"
   port             = 452
 }
 
 resource "aws_alb_target_group_attachment" "t-online-sportal-de-azc" {
   target_group_arn = "${aws_alb_target_group.t-online-sportal-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-azc.id}"
+  target_id        = "${aws_instance.csportal-webserver-azc.id}"
   port             = 452
 }
 
@@ -826,37 +840,38 @@ resource "aws_lb_listener_certificate" "kicker-de" {
 }
 
 resource "aws_alb_target_group" "kicker-de" {
-        name    = "kicker-de-https"
-  vpc_id     = "${aws_vpc.main.id}"
-        port    = "443"
-        protocol        = "HTTPS"
-        health_check {
-                path = "/"
-                port = "80"
-                protocol = "HTTP"
-                healthy_threshold = 2
-                unhealthy_threshold = 2
-                interval = 5
-                timeout = 4
-                matcher = "200-308"
-        }
+  name     = "kicker-de-https"
+  vpc_id   = "${aws_vpc.main.id}"
+  port     = "443"
+  protocol = "HTTPS"
+
+  health_check {
+    path                = "/"
+    port                = "80"
+    protocol            = "HTTP"
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 5
+    timeout             = 4
+    matcher             = "200-308"
+  }
 }
 
 resource "aws_alb_target_group_attachment" "kicker-de-aza" {
   target_group_arn = "${aws_alb_target_group.kicker-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-aza.id}"
+  target_id        = "${aws_instance.csportal-webserver-aza.id}"
   port             = 454
 }
 
 resource "aws_alb_target_group_attachment" "kicker-de-azb" {
   target_group_arn = "${aws_alb_target_group.kicker-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-azb.id}"
+  target_id        = "${aws_instance.csportal-webserver-azb.id}"
   port             = 454
 }
 
 resource "aws_alb_target_group_attachment" "kicker-de-azc" {
   target_group_arn = "${aws_alb_target_group.kicker-de.arn}"
-  target_id = "${aws_instance.csportal-webserver-azc.id}"
+  target_id        = "${aws_instance.csportal-webserver-azc.id}"
   port             = 454
 }
 

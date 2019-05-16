@@ -1,9 +1,10 @@
 resource "aws_efs_file_system" "sportal-web" {
-  creation_token                  = "sportalweb"
-  performance_mode                = "generalPurpose"
-  throughput_mode                 = "bursting"
-#  provisioned_throughput_in_mibps = "256"
-  encrypted                       = "true"
+  creation_token   = "sportalweb"
+  performance_mode = "generalPurpose"
+  throughput_mode  = "bursting"
+
+  #  provisioned_throughput_in_mibps = "256"
+  encrypted = "true"
 
   tags = {
     Name        = "Sportal_web_EFS"
@@ -42,7 +43,9 @@ resource "aws_efs_file_system" "sportal-web2" {
   creation_token   = "sportalweb2"
   performance_mode = "maxIO"
   throughput_mode  = "bursting"
-  encrypted        = "false"
+#  throughput_mode                 = "provisioned"
+#  provisioned_throughput_in_mibps = "256"
+  encrypted = "false"
 
   tags = {
     Name        = "Sportal_web_EFS2"

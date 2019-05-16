@@ -1,12 +1,15 @@
 variable "num_instances_webserver_aza" {
   default = 1
 }
+
 variable "num_instances_webserver_azb" {
   default = 1
 }
+
 variable "num_instances_webserver_azc" {
   default = 1
 }
+
 resource "aws_instance" "csportal-webserver-aza" {
   ami                         = "ami-0a5961bd05f850aa9"
   key_name                    = "${var.keys["${terraform.workspace}"]}"
