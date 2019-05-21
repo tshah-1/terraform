@@ -19,7 +19,7 @@ output "openvpn_ip" {
 }
 
 output "efs_web_dns" {
-  value = "${aws_efs_file_system.sportal-web.dns_name}"
+  value = "${aws_efs_file_system.sportal-web2.dns_name}"
 }
 
 output "efs_cms_dns" {

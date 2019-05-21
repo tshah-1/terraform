@@ -11,7 +11,7 @@ variable "num_instances_webserver_azc" {
 }
 
 resource "aws_instance" "csportal-webserver-aza" {
-  ami                         = "ami-0a5961bd05f850aa9"
+  ami                         = "ami-01a049df762acd642"
   key_name                    = "${var.keys["${terraform.workspace}"]}"
   instance_type               = "t3.medium"
   vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
@@ -38,7 +38,7 @@ resource "aws_route53_record" "csportal-webserver-aza" {
 }
 
 resource "aws_instance" "csportal-webserver-azb" {
-  ami                         = "ami-0a5961bd05f850aa9"
+  ami                         = "ami-01a049df762acd642"
   key_name                    = "${var.keys["${terraform.workspace}"]}"
   instance_type               = "t3.medium"
   vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
@@ -65,7 +65,7 @@ resource "aws_route53_record" "csportal-webserver-azb" {
 }
 
 resource "aws_instance" "csportal-webserver-azc" {
-  ami                         = "ami-0a5961bd05f850aa9"
+  ami                         = "ami-01a049df762acd642"
   key_name                    = "${var.keys["${terraform.workspace}"]}"
   instance_type               = "t3.medium"
   vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]

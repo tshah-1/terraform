@@ -1,13 +1,13 @@
 variable "num_instances_web_aza" {
-  default = 2
+  default = 1
 }
 
 variable "num_instances_web_azb" {
-  default = 2
+  default = 1
 }
 
 variable "num_instances_web_azc" {
-  default = 2
+  default = 1
 }
 
 resource "aws_instance" "csportal-web-aza" {
@@ -96,7 +96,8 @@ resource "aws_elb" "sportal_web_elb" {
   subnets = ["${aws_subnet.webfe_subnet_a.id}", "${aws_subnet.webfe_subnet_b.id}", "${aws_subnet.webfe_subnet_c.id}"]
 
   # instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
-  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  #instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  instances = ["${aws_instance.csportal-webserver-aza.*.id}", "${aws_instance.csportal-webserver-azb.*.id}", "${aws_instance.csportal-webserver-azc.*.id}"]
 
   health_check {
     healthy_threshold   = 2
