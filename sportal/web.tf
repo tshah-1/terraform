@@ -1,9 +1,9 @@
 variable "num_instances_web_aza" {
-  default = 1
+  default = 0
 }
 
 variable "num_instances_web_azb" {
-  default = 1
+  default = 0
 }
 
 variable "num_instances_web_azc" {
@@ -11,7 +11,7 @@ variable "num_instances_web_azc" {
 }
 
 resource "aws_instance" "csportal-web-aza" {
-  ami                         = "ami-0abc3a165de8eca35"
+  ami                         = "ami-089d29b7f09d60fc5"
   key_name                    = "${var.keys["${terraform.workspace}"]}"
   instance_type               = "t3.medium"
   vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
@@ -37,7 +37,7 @@ resource "aws_route53_record" "csportal-web-aza" {
 }
 
 resource "aws_instance" "csportal-web-azb" {
-  ami                         = "ami-0abc3a165de8eca35"
+  ami                         = "ami-089d29b7f09d60fc5"
   key_name                    = "${var.keys["${terraform.workspace}"]}"
   instance_type               = "t3.medium"
   vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
@@ -63,10 +63,10 @@ resource "aws_route53_record" "csportal-web-azb" {
 }
 
 resource "aws_instance" "csportal-web-azc" {
-  ami                         = "ami-0abc3a165de8eca35"
+  ami                         = "ami-089d29b7f09d60fc5"
   key_name                    = "${var.keys["${terraform.workspace}"]}"
-  instance_type               = "t3.medium"
-  vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
+  instance_type               = "t2.micro"
+  vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}", "${aws_security_group.sportal_web_apex_instance.id}"]
   subnet_id                   = "${aws_subnet.webfe_subnet_c.id}"
   count                       = "${var.num_instances_web_azc}"
   associate_public_ip_address = "true"
@@ -128,7 +128,8 @@ resource "aws_elb" "wintersport-kleinezeitung-at" {
   subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
 
   #  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
-  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  #instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  instances = ["${aws_instance.csportal-webserver-aza.*.id}", "${aws_instance.csportal-webserver-azb.*.id}", "${aws_instance.csportal-webserver-azc.*.id}"]
 
   health_check {
     healthy_threshold   = 2
@@ -167,7 +168,8 @@ resource "aws_elb" "liveticker-sueddeutsche-de" {
   subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
 
   # instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
-  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  #instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  instances = ["${aws_instance.csportal-webserver-aza.*.id}", "${aws_instance.csportal-webserver-azb.*.id}", "${aws_instance.csportal-webserver-azc.*.id}"]
 
   health_check {
     healthy_threshold   = 2
@@ -206,7 +208,8 @@ resource "aws_elb" "sportdaten-welt-de" {
   subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
 
   #  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
-  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  #instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  instances = ["${aws_instance.csportal-webserver-aza.*.id}", "${aws_instance.csportal-webserver-azb.*.id}", "${aws_instance.csportal-webserver-azc.*.id}"]
 
   health_check {
     healthy_threshold   = 2
@@ -245,7 +248,8 @@ resource "aws_elb" "sportergebnisse-sueddeutsche" {
   subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
 
   #  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
-  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  #instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  instances = ["${aws_instance.csportal-webserver-aza.*.id}", "${aws_instance.csportal-webserver-azb.*.id}", "${aws_instance.csportal-webserver-azc.*.id}"]
 
   health_check {
     healthy_threshold   = 2
@@ -284,7 +288,8 @@ resource "aws_elb" "welt-sportal-de" {
   subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
 
   #  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
-  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  #instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  instances = ["${aws_instance.csportal-webserver-aza.*.id}", "${aws_instance.csportal-webserver-azb.*.id}", "${aws_instance.csportal-webserver-azc.*.id}"]
 
   health_check {
     healthy_threshold   = 2
@@ -323,7 +328,8 @@ resource "aws_elb" "liveticker-stern-de" {
   subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
 
   #  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
-  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  #instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  instances = ["${aws_instance.csportal-webserver-aza.*.id}", "${aws_instance.csportal-webserver-azb.*.id}", "${aws_instance.csportal-webserver-azc.*.id}"]
 
   health_check {
     healthy_threshold   = 2
@@ -362,7 +368,8 @@ resource "aws_elb" "opta-sky-de" {
   subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
 
   #  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
-  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  #instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  instances = ["${aws_instance.csportal-webserver-aza.*.id}", "${aws_instance.csportal-webserver-azb.*.id}", "${aws_instance.csportal-webserver-azc.*.id}"]
 
   health_check {
     healthy_threshold   = 2
@@ -401,7 +408,8 @@ resource "aws_elb" "20min-sportal-de" {
   subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
 
   #  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
-  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  #instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  instances = ["${aws_instance.csportal-webserver-aza.*.id}", "${aws_instance.csportal-webserver-azb.*.id}", "${aws_instance.csportal-webserver-azc.*.id}"]
 
   health_check {
     healthy_threshold   = 2
@@ -440,7 +448,8 @@ resource "aws_elb" "kurier-sportal-de" {
   subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
 
   #  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
-  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  #instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  instances = ["${aws_instance.csportal-webserver-aza.*.id}", "${aws_instance.csportal-webserver-azb.*.id}", "${aws_instance.csportal-webserver-azc.*.id}"]
 
   health_check {
     healthy_threshold   = 2
@@ -471,45 +480,6 @@ resource "aws_elb" "kurier-sportal-de" {
   connection_draining_timeout = 400
 }
 
-resource "aws_elb" "t-online-sportal-de" {
-  name            = "t-online-sportal-de-elb"
-  security_groups = ["${aws_security_group.sportal_web_elb.id}"]
-
-  #  availability_zones = ["${data.aws_availability_zones.all.names}"]
-  subnets = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-
-  #  instances = ["${aws_instance.csportal-web-aza.*.id}", "${aws_instance.csportal-web-azb.*.id}", "${aws_instance.csportal-web-azc.*.id}"]
-  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
-
-  health_check {
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    timeout             = 12
-    interval            = 30
-    target              = "HTTP:80/"
-  }
-
-  listener {
-    lb_port           = 80
-    lb_protocol       = "http"
-    instance_port     = "80"
-    instance_protocol = "http"
-  }
-
-  listener {
-    lb_port            = 443
-    lb_protocol        = "https"
-    instance_port      = "452"
-    instance_protocol  = "https"
-    ssl_certificate_id = "arn:aws:acm:eu-central-1:884237813524:certificate/c1b5aeed-f249-4ea3-8a45-3cd2e8245a3f"
-  }
-
-  cross_zone_load_balancing   = true
-  idle_timeout                = 400
-  connection_draining         = true
-  connection_draining_timeout = 400
-}
-
 resource "aws_eip" "web_host_ip" {
   instance = "${aws_instance.csportal-web-azc.0.id}"
 }
@@ -519,7 +489,8 @@ resource "aws_elb" "t-online-sportal-de-2" {
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  #instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  instances = ["${aws_instance.csportal-webserver-aza.*.id}", "${aws_instance.csportal-webserver-azb.*.id}", "${aws_instance.csportal-webserver-azc.*.id}"]
 
   health_check {
     healthy_threshold   = 2
@@ -555,20 +526,21 @@ resource "aws_elb" "kicker-de-elb" {
   security_groups = ["${aws_security_group.sportal_web_elb.id}"]
 
   subnets   = ["${aws_subnet.webelbfe_subnet_a.id}", "${aws_subnet.webelbfe_subnet_b.id}", "${aws_subnet.webelbfe_subnet_c.id}"]
-  instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  #instances = ["${aws_instance.csportal-che-aza.*.id}", "${aws_instance.csportal-che-azb.*.id}", "${aws_instance.csportal-che-azc.*.id}"]
+  instances = ["${aws_instance.csportal-webserver-aza.*.id}", "${aws_instance.csportal-webserver-azb.*.id}", "${aws_instance.csportal-webserver-azc.*.id}"]
 
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     timeout             = 12
     interval            = 30
-    target              = "HTTP:8080/"
+    target              = "HTTP:80/"
   }
 
   listener {
     lb_port           = 80
     lb_protocol       = "http"
-    instance_port     = "8080"
+    instance_port     = "8081"
     instance_protocol = "http"
   }
 

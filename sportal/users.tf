@@ -38,6 +38,16 @@ resource "aws_iam_user" "christianmarko" {
   path = "/"
 }
 
+resource "aws_iam_user" "krzysztofmagosa" {
+  name = "krzysztof.magosa"
+  path = "/"
+}
+
+resource "aws_iam_user" "sebastianbugajny" {
+  name = "sebastian.bugajny"
+  path = "/"
+}
+
 resource "aws_iam_group" "admin-users" {
   name = "admin-users"
   path = "/"
@@ -55,6 +65,8 @@ resource "aws_iam_group_membership" "admin-user-membership" {
     "${aws_iam_user.volkerhutten.name}",
     "${aws_iam_user.christianmarko.name}",
     "${aws_iam_user.christianringhofer.name}",
+    "${aws_iam_user. sebastianbugajny.name}",
+    "${aws_iam_user.krzysztofmagosa.name}",
   ]
 
   group = "${aws_iam_group.admin-users.name}"

@@ -1,17 +1,17 @@
 variable "num_instances_che_aza" {
-  default = 1
+  default = 0
 }
 
 variable "num_instances_che_azb" {
-  default = 1
+  default = 0
 }
 
 variable "num_instances_che_azc" {
-  default = 1
+  default = 0
 }
 
 resource "aws_instance" "csportal-che-aza" {
-  ami      = "ami-0246e172288e11de0"
+  ami      = "ami-06f428e6d06b4196d"
   key_name = "${var.keys["${terraform.workspace}"]}"
 
   # instance_type               = "r5a.2xlarge"
@@ -39,7 +39,7 @@ resource "aws_route53_record" "csportal-che-aza" {
 }
 
 resource "aws_instance" "csportal-che-azb" {
-  ami                         = "ami-0246e172288e11de0"
+  ami                         = "ami-06f428e6d06b4196d"
   key_name                    = "${var.keys["${terraform.workspace}"]}"
   instance_type               = "t3.small"
   vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
@@ -65,7 +65,7 @@ resource "aws_route53_record" "csportal-che-azb" {
 }
 
 resource "aws_instance" "csportal-che-azc" {
-  ami                         = "ami-0246e172288e11de0"
+  ami                         = "ami-06f428e6d06b4196d"
   key_name                    = "${var.keys["${terraform.workspace}"]}"
   instance_type               = "t3.small"
   vpc_security_group_ids      = ["${aws_security_group.sportal_web.id}"]
