@@ -60,13 +60,13 @@ resource "aws_iam_group_membership" "admin-user-membership" {
     "${aws_iam_user.gernotheschl.name}",
     "${aws_iam_user.chrismuzyunda.name}",
     "${aws_iam_user.bernddielacher.name}",
+    "${aws_iam_user.krzysztofmagosa.name}",
+    "${aws_iam_user.sebastianbugajny.name}",
     "${aws_iam_user.bostjanbele.name}",
     "${aws_iam_user.haraldsaringer.name}",
     "${aws_iam_user.volkerhutten.name}",
     "${aws_iam_user.christianmarko.name}",
     "${aws_iam_user.christianringhofer.name}",
-    "${aws_iam_user. sebastianbugajny.name}",
-    "${aws_iam_user.krzysztofmagosa.name}",
   ]
 
   group = "${aws_iam_group.admin-users.name}"
