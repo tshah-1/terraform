@@ -14,7 +14,7 @@ data "aws_subnet_ids" "cms" {
 resource "aws_instance" "csportal-cms-aza" {
   ami                    = "${var.images["${terraform.workspace}"]}"
   key_name               = "${var.keys["${terraform.workspace}"]}"
-  instance_type          = "t3.medium"
+  instance_type          = "t3.large"
   vpc_security_group_ids = ["${aws_security_group.sportal_cms.id}"]
   subnet_id              = "${aws_subnet.cms_subnet_a.id}"
   count                  = "${var.num_instances_cms}"
