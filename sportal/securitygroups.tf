@@ -414,7 +414,7 @@ resource "aws_security_group" "sportal_db" {
 
   # allow traffic to MYSQL port
   ingress {
-    security_groups = ["${aws_security_group.sportal_cms.id}", "${aws_security_group.sportal_web.id}", "${aws_security_group.Ansible_SSH_Access.id}", "${aws_security_group.openvpn.id}", "${aws_security_group.monitoring.id}"]
+    security_groups = ["${aws_security_group.sportal_cms.id}", "${aws_security_group.sportal_web.id}", "${aws_security_group.Ansible_SSH_Access.id}", "${aws_security_group.openvpn.id}", "${aws_security_group.ops_monitoring.id}"]
     from_port       = 3306
     to_port         = 3306
     protocol        = "tcp"
