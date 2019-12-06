@@ -487,14 +487,14 @@ resource "aws_security_group" "ops_monitoring" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["${aws_eip.openvpn_eip.public_ip}/32", "109.73.148.70/32", "62.253.83.190/32", "172.27.224.0/20"]
+    cidr_blocks = ["${aws_eip.openvpn_eip.public_ip}/32", "109.73.148.70/32", "62.253.83.190/32", "172.27.224.0/20", "62.253.83.190/32", "81.19.48.109/32"]
   }
 
   ingress {
     from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
-    cidr_blocks = ["${aws_eip.openvpn_eip.public_ip}/32", "109.73.148.70/32", "62.253.83.190/32", "172.27.224.0/20"]
+    cidr_blocks = ["${aws_eip.openvpn_eip.public_ip}/32", "109.73.148.70/32", "62.253.83.190/32", "172.27.224.0/20", "62.253.83.190/32", "81.19.48.109/32]
   }
 
   egress {
