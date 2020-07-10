@@ -398,7 +398,7 @@ resource "aws_lb_listener_rule" "sportergebnisse-sd" {
 
 resource "aws_lb_listener_certificate" "welt-sportal-de" {
   listener_arn    = "${aws_alb_listener.sportal_alb_https.arn}"
-  certificate_arn = "arn:aws:acm:eu-central-1:884237813524:certificate/ca0a50e5-e9c5-4990-a5aa-6ab22f584184"
+  certificate_arn = "arn:aws:acm:eu-central-1:884237813524:certificate/33a11b04-24c6-41d6-bcf8-67280eca1a6c"
 }
 
 resource "aws_alb_target_group" "welt-sportal-de" {
@@ -617,7 +617,7 @@ resource "aws_lb_listener_rule" "opta-sky-de" {
 
 resource "aws_lb_listener_certificate" "20min-sportal-de" {
   listener_arn    = "${aws_alb_listener.sportal_alb_https.arn}"
-  certificate_arn = "arn:aws:acm:eu-central-1:884237813524:certificate/fc6ac4bd-e117-4fb9-b57f-9ef43f43a340"
+  certificate_arn = "arn:aws:acm:eu-central-1:884237813524:certificate/73ee0f77-9aee-4254-90ef-bbf32ec568f0"
 }
 
 resource "aws_alb_target_group" "20min-sportal-de" {
